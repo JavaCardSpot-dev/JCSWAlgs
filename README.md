@@ -38,3 +38,6 @@ Important: No special protection against side-channels (e.g., timing analysis) a
 
 
 Task to do in first week
+
+Team members for algorithms test 
+
