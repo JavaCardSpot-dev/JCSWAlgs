@@ -1,4 +1,4 @@
-package sid;
+package applets;
 
 import javacard.framework.CardRuntimeException;
 import javacard.framework.ISOException;

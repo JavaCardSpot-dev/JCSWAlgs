@@ -1,6 +1,6 @@
-package sid;
+package applets;
 
-import sid.Sha3Keccak.double_uint8;
+import applets.Sha3Keccak.double_uint8;
 
 public class Sha3Keccak_r544_c256 extends Sha3Keccak_W32
 {

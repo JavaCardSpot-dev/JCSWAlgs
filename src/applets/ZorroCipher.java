@@ -1,4 +1,4 @@
-package sid;
+package applets;
 
 import javacard.framework.ISO7816;
 import javacard.framework.JCSystem;

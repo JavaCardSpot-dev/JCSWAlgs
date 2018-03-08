@@ -1,4 +1,4 @@
-package sid;
+package applets;
 
 import com.sun.javacard.crypto.q;
 
@@ -16,7 +16,7 @@ import javacardx.crypto.Cipher;
 import javacardx.external.MemoryAccess;
 import javacardx.framework.math.BigNumber;
 import javacardx.framework.util.ArrayLogic;
-import sid.UProveParameters.UproveInternal;
+import applets.UProveParameters.UproveInternal;
 
 public class UProve implements IConsts {
 	

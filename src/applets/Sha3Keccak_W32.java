@@ -1,7 +1,7 @@
-package sid;
+package applets;
 
 import javacard.framework.Util;
-import sid.Sha3Keccak.double_uint8;
+import applets.Sha3Keccak.double_uint8;
 
 public abstract class Sha3Keccak_W32 extends Sha3Keccak 
 {
