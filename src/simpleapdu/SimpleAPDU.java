@@ -1,10 +1,17 @@
-package simpleapdu;
+package tests;
 
 import applets.TestSWAlgsApplet;
 import javacard.framework.ISO7816;
 import javacard.security.CryptoException;
 import javacard.security.KeyPair;
 import javax.smartcardio.ResponseAPDU;
+import javax.smartcardio.CardException;
+import javax.smartcardio.CommandAPDU;
+import java.util.ArrayList;
+import cardTools.CardManager;
+import cardTools.RunConfig;
+import cardTools.Util;
+
 
 /**
  *
