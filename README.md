@@ -35,9 +35,11 @@ unwrapLen = m_rsaOAEP.doFinal(inArray, baseOffset, wrapLen, outArray, baseOffset
 
 Important: No special protection against side-channels (e.g., timing analysis) added so far. 
 
-
+Based on gardle template available at https://github.com/crocs-muni/javacard-gradle-template-edu
 
 Task to do in first week
 
 Team members for algorithms test 
-
+1
+2
+3
