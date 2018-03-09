@@ -6,4 +6,5 @@ jdk:
 script:
   - ./gradlew check --info
   - ./gradlew buildJavaCard --info
+  - ./gradlew test --rerun-tasks --info
 
