@@ -441,8 +441,7 @@ public abstract class Sha3Keccak_W32 extends Sha3Keccak
 							sB[(short)(y + x + (2*(KECCAK_VALUE_W/16)))].value));
 				}
 				for(x = 0; x != (short)(KECCAK_VALUE_W/16); x++){
-					state[(short)((short)(y + (3*(KECCAK_VALUE_W/16)) + x))].value = (short) (sB[(short)(y + (3*(KECCAK_VALUE_W/16)) + x)].value 
-							^ ((~ sB[(short)(y + (4*(KECCAK_VALUE_W/16)) + x)].value) & sB[(short)(y + x)].value));
+					state[(short)((short)(y + (3*(KECCAK_VALUE_W/16)) + x))].value = (short) (sB[(short)(y + (3*(KECCAK_VALUE_W/16)) + x)].value ^ ((~ sB[(short)(y + (4*(KECCAK_VALUE_W/16)) + x)].value) & sB[(short)(y + x)].value));
 				}
 				for(x = 0; x != (short)(KECCAK_VALUE_W/16); x++){
 					state[(short)(y + (4*(KECCAK_VALUE_W/16)) + x)].value = (short) (sB[(short)(y + (4*(KECCAK_VALUE_W/16)) + x)].value ^ 

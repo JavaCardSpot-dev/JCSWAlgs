@@ -264,6 +264,7 @@ public class TestApplet extends Applet
 		    		
 		    		default:
 		    			ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
+		    			return;
 		    	}
 		    case OFFSET_P1_DEC:
 		    	switch(type)
