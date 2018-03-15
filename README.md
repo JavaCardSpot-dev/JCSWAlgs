@@ -10,9 +10,14 @@ JCSWAlgs
 The Suite of software reimplementations of selected cryptographic algorithms potentially missing on your smartcard with JavaCard platform. Optimized for speed and small memory footprint.
 
 Following algorithms are included at the moment:
-- Advanced Encryption Standard (AES) with 128bit key (soon)
-- Optimal Asymmetric Encryption Padding (OAEP)
-- SHA2-384 and SHA2-512 cryptographic hash functions (soon)
+From https://github.com/petrs/JCSWAlgs
+- Optimal Asymmetric Encryption Padding (OAEP) 
+From https://github.com/albertocarp/Primitives_SmartCard
+- TwineCipher
+- ZorroCipher
+- SHA3Keccak
+- UProve(:information_source: **Refer to issue**)
+
 
 All algorithms are allows to reuse already allocated cryptographic primitives and RAM memory arrays to decrease memory footprint. Allocation of the algorithm is therefore performed differently from native primitives (e.g., SWAES.getInstance() instead of Cipher.getInstance() is required).
 
@@ -35,9 +40,3 @@ Important: No special protection against side-channels (e.g., timing analysis) a
 
 Based on gardle template available at https://github.com/crocs-muni/javacard-gradle-template-edu
 
-Task to do in first week
-
-Team members for algorithms test 
-1
-2
-3
