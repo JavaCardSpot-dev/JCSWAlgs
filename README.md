@@ -21,22 +21,7 @@ From https://github.com/albertocarp/Primitives_SmartCard
 
 All algorithms are allows to reuse already allocated cryptographic primitives and RAM memory arrays to decrease memory footprint. Allocation of the algorithm is therefore performed differently from native primitives (e.g., SWAES.getInstance() instead of Cipher.getInstance() is required).
 
-Usage - RSA OAEP
------
-````java
-// Allocate instance of RSA with OAEP 
-// cipherEngine (Cipher), hashEngine (MessageDigest) and rngEngine (RandomData) are native JavaCard engines
-RSAOAEP rsaOAEP = RSAOAEP.getInstance(cipherEngine, hashEngine, rngEngine, optEncParams, optAuxRAMArray);
-
-// Encrypt data
-rsaOAEP.init(m_rsaPubKey, Cipher.MODE_ENCRYPT);
-short wrapLen = m_rsaOAEP.doFinal(inArray, baseOffset, dataLen, outArray, baseOffset);
-
-// Decrypt data
-rsaOAEP.init(m_rsaPrivKey, Cipher.MODE_DECRYPT);
-unwrapLen = m_rsaOAEP.doFinal(inArray, baseOffset, wrapLen, outArray, baseOffset);
-
-Important: No special protection against side-channels (e.g., timing analysis) added so far. 
 
 Based on gardle template available at https://github.com/crocs-muni/javacard-gradle-template-edu
+
 
