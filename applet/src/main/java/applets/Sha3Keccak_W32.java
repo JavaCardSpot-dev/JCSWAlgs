@@ -223,7 +223,7 @@ public abstract class Sha3Keccak_W32 extends Sha3Keccak
 		}
 		else
 		{
-			  for ( short j = 0 ; j < (short)(message_size_bytes);j+=2)
+			  for ( short j = 0 ; j < (message_size_bytes);j+=2)
 			    {
 			    	state[j].lsb = message[j];
 					state[j].msb = message[(short)(j+1)];
@@ -356,7 +356,7 @@ public abstract class Sha3Keccak_W32 extends Sha3Keccak
 			*/
 			for(x = 0; x != (short)(5*(short)(KECCAK_VALUE_W/16)); x++){
 				sC[x].value = (short) (state[x].value ^ state[(short)(x + 5*(short)(KECCAK_VALUE_W/16))].value ^ state[(short)(x + 10*(KECCAK_VALUE_W/16))].value ^ 
-						state[(short)(x + (short)15*((short)KECCAK_VALUE_W/16))].value ^ state[(short)(x + (short)20*((short)KECCAK_VALUE_W/16))].value);
+						state[(short)(x + (short)15*(KECCAK_VALUE_W/16))].value ^ state[(short)(x + (short)20*(KECCAK_VALUE_W/16))].value);
 			}
 
 			for(x = 0; x != (short)(5*(KECCAK_VALUE_W/16)); x+=(KECCAK_VALUE_W/16)){

@@ -268,7 +268,7 @@ public abstract class Sha3Keccak_W16 extends Sha3Keccak {
 		}
 		else
 		{
-			  for ( short j = 0 ; j < (short)(message_size_bytes);j+=2)
+			  for ( short j = 0 ; j < (message_size_bytes);j+=2)
 			    {
 			    	state[j].lsb = message[j];
 					state[j].msb = message[(short)(j+1)];

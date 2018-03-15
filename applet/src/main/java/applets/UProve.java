@@ -215,7 +215,7 @@ public class UProve implements IConsts {
 		if(parameters.e_i[atrr_index] == 0x01)
 		{
 			i = setNumber(attr_size, data, offset, temp1, OFFSET_START);
-			MessageDigest.getInstance(MessageDigest.ALG_SHA, false).doFinal(temp1,OFFSET_START,(short)(i), temp2, OFFSET_START);
+			MessageDigest.getInstance(MessageDigest.ALG_SHA, false).doFinal(temp1,OFFSET_START,(i), temp2, OFFSET_START);
 			Util.arrayCopy(temp2, OFFSET_START,parameters.x_i[atrr_index].value,OFFSET_START,(short)20);
 		}
 		else
@@ -276,7 +276,7 @@ public class UProve implements IConsts {
 		for ( i = 0 ; i < max_attr;i++)
 		{
 			byte[] data = jcMath.modPow(parameters.g_i[i].value, OFFSET_START, Configuration.LENGTH_RSAOBJECT_MODULUS, parameters.x_i[i].value,
-					OFFSET_START, (short)UProveParameters.QSIZE_BYTES);
+					OFFSET_START, UProveParameters.QSIZE_BYTES);
 			Util.arrayCopy(data, Configuration.TEMP_OFFSET_RSA,parameters.temp_ram, OFFSET_START, UProveParameters.PSIZE_BYTES);
 			jcMath.modMultiply(parameters.gamma, OFFSET_START, UProveParameters.PSIZE_BYTES,parameters.temp_ram,OFFSET_START,Configuration.LENGTH_RSAOBJECT_MODULUS,OFFSET_START);
 		}	
@@ -284,7 +284,7 @@ public class UProve implements IConsts {
 	public void computeXt()
 	{
 		short i,offset = 0;
-		offset = setNumber((short) parameters.UID_P_LENGTH, parameters.UID_P,OFFSET_START, parameters.array,offset);
+		offset = setNumber( parameters.UID_P_LENGTH, parameters.UID_P,OFFSET_START, parameters.array,offset);
 		offset = setNumber(UProveParameters.PSIZE_BYTES, parameters.p,OFFSET_START, parameters.array,offset);
 		offset = setNumber(UProveParameters.QSIZE_BYTES, parameters.q,OFFSET_START, parameters.array,offset);
 		offset = setNumber(UProveParameters.PSIZE_BYTES, parameters.g,OFFSET_START, parameters.array,offset);
@@ -294,18 +294,18 @@ public class UProve implements IConsts {
 		{
 			offset = setNumber(UProveParameters.PSIZE_BYTES,parameters.g_i[i].value,OFFSET_START,parameters.array,offset);
 		}
-		setInt((short)(parameters.MAX_ATTR),parameters.array,offset);
+		setInt((parameters.MAX_ATTR),parameters.array,offset);
 		offset +=4;	
-		for(i=0;i<(short)((parameters.MAX_ATTR));i++)
+		for(i=0;i<((parameters.MAX_ATTR));i++)
 		{
 			parameters.array[offset++] = parameters.e_i[i];
 		}
-		offset = setNumber((short)parameters.S_LENGTH, parameters.S,OFFSET_START, parameters.array,offset);
+		offset = setNumber(parameters.S_LENGTH, parameters.S,OFFSET_START, parameters.array,offset);
 		MessageDigest.getInstance(MessageDigest.ALG_SHA, false).doFinal( parameters.array, OFFSET_START,offset, temp1,OFFSET_START);
 		offset = 0;
 		parameters.temp_ram[offset++] = 0x01;
-		offset = setNumber((short) UProveParameters.QSIZE_BYTES,temp1,OFFSET_START, parameters.temp_ram,offset);
-		offset = setNumber((short) parameters.T1_LENGTH ,parameters.TI,OFFSET_START, parameters.temp_ram,offset);
+		offset = setNumber( UProveParameters.QSIZE_BYTES,temp1,OFFSET_START, parameters.temp_ram,offset);
+		offset = setNumber( parameters.T1_LENGTH ,parameters.TI,OFFSET_START, parameters.temp_ram,offset);
 		MessageDigest.getInstance(MessageDigest.ALG_SHA, false).doFinal( parameters.temp_ram,OFFSET_START,offset,parameters.x_i[parameters.MAX_ATTR].value,OFFSET_START); 
 	}
 	
@@ -399,11 +399,11 @@ public class UProve implements IConsts {
 		
 		
 		short offset = 0 ;
-		offset = setNumber((short) UProveParameters.PSIZE_BYTES, parameters.h,OFFSET_START, parameters.array,offset);
-		offset = setNumber((short) parameters.P1_LENGTH, parameters.PI,OFFSET_START, parameters.array,offset);
-		offset = setNumber((short) UProveParameters.PSIZE_BYTES, parameters.sigma_s_prime,OFFSET_START, parameters.array,offset);
-		offset = setNumber((short) UProveParameters.PSIZE_BYTES, parameters.sigma_a_prime,OFFSET_START, parameters.array,offset);
-		offset = setNumber((short) UProveParameters.PSIZE_BYTES, parameters.sigma_b_prime,OFFSET_START, parameters.array,offset);
+		offset = setNumber( UProveParameters.PSIZE_BYTES, parameters.h,OFFSET_START, parameters.array,offset);
+		offset = setNumber( parameters.P1_LENGTH, parameters.PI,OFFSET_START, parameters.array,offset);
+		offset = setNumber( UProveParameters.PSIZE_BYTES, parameters.sigma_s_prime,OFFSET_START, parameters.array,offset);
+		offset = setNumber( UProveParameters.PSIZE_BYTES, parameters.sigma_a_prime,OFFSET_START, parameters.array,offset);
+		offset = setNumber( UProveParameters.PSIZE_BYTES, parameters.sigma_b_prime,OFFSET_START, parameters.array,offset);
 		MessageDigest.getInstance(MessageDigest.ALG_SHA, false).doFinal( parameters.array, OFFSET_START,offset, temp1,OFFSET_START);
 	   	if(jcMath.isGreater(temp1, OFFSET_START, UProveParameters.QSIZE_BYTES,parameters.q, OFFSET_START,  UProveParameters.QSIZE_BYTES)>0)
 	   	{
@@ -454,13 +454,13 @@ public class UProve implements IConsts {
 		Util.arrayCopy(parameters.temp_ram, OFFSET_START,parameters.sigma_r_prime, OFFSET_START, UProveParameters.QSIZE_BYTES);
 		// stores in temp_data token_id
 		short offset = 0 ;
-		offset = setNumber((short) parameters.UID_P_LENGTH, parameters.UID_P,OFFSET_START, parameters.array,offset);
-		offset = setNumber((short) UProveParameters.PSIZE_BYTES, parameters.h,OFFSET_START, parameters.array,offset);
-		offset = setNumber((short) parameters.T1_LENGTH, parameters.TI,OFFSET_START, parameters.array,offset);
-		offset = setNumber((short) parameters.P1_LENGTH, parameters.PI,OFFSET_START, parameters.array,offset);
-		offset = setNumber((short) UProveParameters.PSIZE_BYTES, parameters.sigma_s_prime,OFFSET_START, parameters.array,offset);
-		offset = setNumber((short) UProveParameters.QSIZE_BYTES, parameters.sigma_c_prime,OFFSET_START, parameters.array,offset);
-		offset = setNumber((short) UProveParameters.QSIZE_BYTES, parameters.sigma_r_prime,OFFSET_START, parameters.array,offset);
+		offset = setNumber( parameters.UID_P_LENGTH, parameters.UID_P,OFFSET_START, parameters.array,offset);
+		offset = setNumber( UProveParameters.PSIZE_BYTES, parameters.h,OFFSET_START, parameters.array,offset);
+		offset = setNumber( parameters.T1_LENGTH, parameters.TI,OFFSET_START, parameters.array,offset);
+		offset = setNumber( parameters.P1_LENGTH, parameters.PI,OFFSET_START, parameters.array,offset);
+		offset = setNumber( UProveParameters.PSIZE_BYTES, parameters.sigma_s_prime,OFFSET_START, parameters.array,offset);
+		offset = setNumber( UProveParameters.QSIZE_BYTES, parameters.sigma_c_prime,OFFSET_START, parameters.array,offset);
+		offset = setNumber( UProveParameters.QSIZE_BYTES, parameters.sigma_r_prime,OFFSET_START, parameters.array,offset);
 		
 		// return T = tempArray[0 offset];
 	}
@@ -488,7 +488,7 @@ public class UProve implements IConsts {
 		
 		
 		byte[] resultFull = jcMath.modPowFull(parameters.temp_ram, (short) (2*UProveParameters.PSIZE_BYTES), UProveParameters.PSIZE_BYTES,
-				parameters.p_minus_two,OFFSET_START,(short) UProveParameters.PSIZE_BYTES);
+				parameters.p_minus_two,OFFSET_START, UProveParameters.PSIZE_BYTES);
 		
 		result = jcMath.modPow(resultFull, OFFSET_START, UProveParameters.PSIZE_BYTES,
 				parameters.sigma_c_prime, OFFSET_START,UProveParameters.QSIZE_BYTES);
@@ -496,7 +496,7 @@ public class UProve implements IConsts {
 		Util.arrayCopy(result,Configuration.TEMP_OFFSET_RSA,parameters.temp_ram, (short) (2*UProveParameters.PSIZE_BYTES), UProveParameters.PSIZE_BYTES);
 		
 		jcMath.modMultiply(parameters.temp_ram, (short) (2*UProveParameters.PSIZE_BYTES), UProveParameters.PSIZE_BYTES,
-				parameters.temp_ram,(short)UProveParameters.PSIZE_BYTES,UProveParameters.PSIZE_BYTES,OFFSET_START);
+				parameters.temp_ram,UProveParameters.PSIZE_BYTES,UProveParameters.PSIZE_BYTES,OFFSET_START);
 		
 		Util.arrayCompare(parameters.temp_ram, (short) (2*UProveParameters.PSIZE_BYTES), parameters.temp_ram, OFFSET_START, UProveParameters.PSIZE_BYTES);
 		//Util.arrayCompare(parameters.temp_ram, (short) (UProveParameters.PSIZE_BYTES), parameters.temp_ram, OFFSET_START, UProveParameters.PSIZE_BYTES);

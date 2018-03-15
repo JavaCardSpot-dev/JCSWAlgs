@@ -15,7 +15,7 @@ public class Sha3Keccak160 extends Sha3Keccak
 		KECCAK_STATE_SIZE_BITS = (short) (25*KECCAK_VALUE_W);
 		KECCAK_CAPACITY = (short) (2*KECCAK_SEC_LEVEL);
 		KECCAK_RATE = (short) (KECCAK_STATE_SIZE_BITS - KECCAK_CAPACITY);
-		KECCAK_STATE_SIZE_WORDS  = (short) ((short)(KECCAK_STATE_SIZE_BITS+ (short)((short)(PROCESSOR_WORD-1)))/(PROCESSOR_WORD));
+		KECCAK_STATE_SIZE_WORDS  = (short) ((short)(KECCAK_STATE_SIZE_BITS+ ((short)(PROCESSOR_WORD-1)))/(PROCESSOR_WORD));
 		KECCAK_RATE_SIZE_WORDS =  (short) ((short)(KECCAK_RATE+(short)(PROCESSOR_WORD-1))/(PROCESSOR_WORD));
 		state = new double_uint8[KECCAK_STATE_SIZE_WORDS];
 		KECCAK_NUMBER_OF_ROUNDS = 18;
@@ -642,7 +642,7 @@ public class Sha3Keccak160 extends Sha3Keccak
 		}
 		else
 		{
-			  for ( short j = 0 ; j < (short)(message_size_bytes);j+=2)
+			  for ( short j = 0 ; j < (message_size_bytes);j+=2)
 			    {
 			    	state[j].lsb = message[j];
 					state[j].msb = message[(short)(j+1)];

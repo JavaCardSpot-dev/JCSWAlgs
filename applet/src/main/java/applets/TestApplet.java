@@ -283,6 +283,7 @@ public class TestApplet extends Applet
 		    			return;
 		    		default:
 		    			ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
+		    			return;
 		    	}
 		    case OFFSET_P1_GEN:
 		    	switch(type)
@@ -297,6 +298,7 @@ public class TestApplet extends Applet
 		    			return;
 		    		default:
 		    			ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
+		    			return;
 		    	}
 		    	default:
 		    		break;
@@ -366,7 +368,7 @@ public class TestApplet extends Applet
 			{
 				Sha3Keccak cipherHash = Sha3Keccak.getInstance(IConsts.HASH_KECCAK_160);
 				cipherHash.postInit();
-				len_data  = cipherHash.process(HASH, buf, (byte)(ISO7816.OFFSET_CDATA), count_data);
+				len_data  = cipherHash.process(HASH, buf, (ISO7816.OFFSET_CDATA), count_data);
 				apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, len_data);
     			return;
 			}
@@ -374,7 +376,7 @@ public class TestApplet extends Applet
 			{
 				Sha3Keccak cipherHash = Sha3Keccak.getInstance(IConsts.HASH_KECCAK_r144c256);
 				cipherHash.postInit();
-				len_data  = cipherHash.process(HASH, buf, (byte)(ISO7816.OFFSET_CDATA), count_data);
+				len_data  = cipherHash.process(HASH, buf, (ISO7816.OFFSET_CDATA), count_data);
 				apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, len_data);
     			return;
 			}
@@ -382,7 +384,7 @@ public class TestApplet extends Applet
 			{
 				Sha3Keccak cipherHash = Sha3Keccak.getInstance(IConsts.HASH_KECCAK_r128c272);
 				cipherHash.postInit();
-				len_data  = cipherHash.process(HASH, buf, (byte)(ISO7816.OFFSET_CDATA), count_data);
+				len_data  = cipherHash.process(HASH, buf, (ISO7816.OFFSET_CDATA), count_data);
 				apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, len_data);
     			return;
 			}
@@ -390,7 +392,7 @@ public class TestApplet extends Applet
 			{
 				Sha3Keccak cipherHash = Sha3Keccak.getInstance(IConsts.HASH_KECCAK_r544c256);
 				cipherHash.postInit();
-				len_data  = cipherHash.process(HASH, buf, (byte)(ISO7816.OFFSET_CDATA), count_data);
+				len_data  = cipherHash.process(HASH, buf, (ISO7816.OFFSET_CDATA), count_data);
 				apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, len_data);
     			return;
 			}
@@ -398,7 +400,7 @@ public class TestApplet extends Applet
 			{
 				Sha3Keccak cipherHash = Sha3Keccak.getInstance(IConsts.HASH_KECCAK_r512c288);
 				cipherHash.postInit();
-				len_data  = cipherHash.process(HASH, buf, (byte)(ISO7816.OFFSET_CDATA), count_data);
+				len_data  = cipherHash.process(HASH, buf, (ISO7816.OFFSET_CDATA), count_data);
 				apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, len_data);
     			return;
 			}
@@ -406,7 +408,7 @@ public class TestApplet extends Applet
 			{
 				Sha3Keccak cipherHash = Sha3Keccak.getInstance(IConsts.HASH_KECCAK_r256c544);
 				cipherHash.postInit();
-				len_data  = cipherHash.process(HASH, buf, (byte)(ISO7816.OFFSET_CDATA), count_data);
+				len_data  = cipherHash.process(HASH, buf, (ISO7816.OFFSET_CDATA), count_data);
 				apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, len_data);
     			return;
 			}

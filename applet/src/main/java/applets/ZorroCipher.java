@@ -163,7 +163,7 @@ public class ZorroCipher extends Cipher implements IConsts
 		state[(short)(12+ offset_state)] = (byte) (state[(short)(12+offset_state)] ^ (round << 3));
 		
 		/*shiift the rows*/
-		byte tmp = (byte) (state[(short)(1+offset_state)] );
+		byte tmp =  (state[(short)(1+offset_state)] );
 		state[(short)(1+offset_state)] = (byte) (state[(short)(5+offset_state)] & 0x00ff);
 		state[(short)(5+offset_state)] = state[(short)(9+offset_state)];
 		state[(short)(9+offset_state)] = state[(short)(13+offset_state)];

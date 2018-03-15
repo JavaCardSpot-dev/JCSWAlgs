@@ -156,9 +156,9 @@ public class JCMath {
 
 	public void updateModulus(byte[] modulus,short mOffset,short mLength)
 	{	
-		mRsaPublicKekForSquare.setModulus(tempBuffer, Configuration.TEMP_OFFSET_MODULUS, (short) Configuration.LENGTH_RSAOBJECT_MODULUS);
-		mRsaPublicKeyModPow.setModulus(tempBuffer,  Configuration.TEMP_OFFSET_MODULUS, (short) Configuration.LENGTH_RSAOBJECT_MODULUS);
-		mRsaPrivateKeyModPow.setModulus(tempBuffer,  Configuration.TEMP_OFFSET_MODULUS, (short) Configuration.LENGTH_RSAOBJECT_MODULUS);	
+		mRsaPublicKekForSquare.setModulus(tempBuffer, Configuration.TEMP_OFFSET_MODULUS, Configuration.LENGTH_RSAOBJECT_MODULUS);
+		mRsaPublicKeyModPow.setModulus(tempBuffer,  Configuration.TEMP_OFFSET_MODULUS, Configuration.LENGTH_RSAOBJECT_MODULUS);
+		mRsaPrivateKeyModPow.setModulus(tempBuffer,  Configuration.TEMP_OFFSET_MODULUS, Configuration.LENGTH_RSAOBJECT_MODULUS);
 	}
 	
 	public byte[] modPow(byte[] x,short xOffset,short xLength,byte[] y,short yOffset,short yLength)
@@ -170,7 +170,7 @@ public class JCMath {
 		mRsaCipherModPow.init(mRsaPrivateKeyModPow, Cipher.MODE_DECRYPT);
 		Util.arrayFillNonAtomic(tempBuffer,(short)0,(short)(Configuration.LENGTH_RSAOBJECT_MODULUS + Configuration.ADDITIONAL_PADDING),(byte)0x00);
 		Util.arrayCopy(x,xOffset,tempBuffer,Configuration.TEMP_OFFSET_RSA, xLength);
-		mRsaCipherModPow.doFinal(tempBuffer,Configuration.TEMP_OFFSET_RSA, (short) (Configuration.LENGTH_RSAOBJECT_MODULUS), tempBuffer,Configuration.TEMP_OFFSET_RSA);
+		mRsaCipherModPow.doFinal(tempBuffer,Configuration.TEMP_OFFSET_RSA, (Configuration.LENGTH_RSAOBJECT_MODULUS), tempBuffer,Configuration.TEMP_OFFSET_RSA);
 		return tempBuffer;
 	}
 	public byte[] modPowFull(byte[] x,short xOffset,short xLength,byte[] y,short yOffset,short yLength)
@@ -180,7 +180,7 @@ public class JCMath {
 		mRsaPrivateKeyModPow.setExponent(ram_y,IConsts.OFFSET_START,yLength);
 		mRsaCipherModPow.init(mRsaPrivateKeyModPow, Cipher.MODE_DECRYPT);
 		Util.arrayCopy(x,xOffset,ram_x,IConsts.OFFSET_START, xLength);
-		mRsaCipherModPow.doFinal(ram_x,IConsts.OFFSET_START, (short) (Configuration.LENGTH_RSAOBJECT_MODULUS),ram_x,IConsts.OFFSET_START);
+		mRsaCipherModPow.doFinal(ram_x,IConsts.OFFSET_START, (Configuration.LENGTH_RSAOBJECT_MODULUS),ram_x,IConsts.OFFSET_START);
 		return ram_x;
 	}
     public short isGreater(byte[] x,short xOffset,short xLength,byte[] y ,short yOffset,short yLength)

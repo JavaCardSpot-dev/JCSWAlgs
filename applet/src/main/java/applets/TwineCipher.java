@@ -179,7 +179,7 @@ public class TwineCipher implements IConsts{
 			
 			for (iterator3 = 0 ; iterator3 < 16;iterator3++)
 			{
-				temp[(short)(shuf[iterator3]+16)] = temp[(short)(iterator3)];
+				temp[(short)(shuf[iterator3]+16)] = temp[(iterator3)];
 			}
 			Util.arrayCopy(temp, (short)16, temp, (short)0, (short)16);
 		}
@@ -217,7 +217,7 @@ public class TwineCipher implements IConsts{
 			
 			for (iterator3 = 0 ; iterator3 < 16;iterator3++)
 			{
-				temp[(short)(shufinv[iterator3]+16)] = temp[(short)(iterator3)];
+				temp[(short)(shufinv[iterator3]+16)] = temp[(iterator3)];
 			}
 			Util.arrayCopy(temp, (short)16, temp, (short)0, (short)16);
 		}
