@@ -63,13 +63,30 @@ public class SimpleAPDU {
             System.out.println(" Failed.");
         }
         System.out.println(" Done.");
+        ResponseAPDU response;
         // Connect to first available card
         // NOTE: selects target applet based on AID specified in CardManager constructor
+        System.out.println("Symmetric Block Ciphers: ");
+        System.out.println("1)TwineCipher: ");
+        System.out.println("Setting Key: ");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x30,plain));
+
+
+        System.out.println("2)ZorroCipher: ");
+        System.out.println("3)AES256");
+
+
+
+        System.out.println("RSA OAEP: ");
+
+        System.out.println("Hash: ");
+
+
 
         byte[] aes_key_iv = Util.hexStringToByteArray("00000011223344556677889900000000000000000000000000000000000000000000");
         //ResponseAPDU response = cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,aes_key_iv));
         //System.out.println(response);
-        ResponseAPDU response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x30,plain));
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x30,plain));
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x41,0x00,plain));
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x42,0x00,plain));
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x43,0x00,plain));
