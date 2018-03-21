@@ -71,13 +71,15 @@ public class JavaCardApplet  extends Applet
 
             m_dataArray = new byte[ARRAY_LENGTH];
             Util.arrayFillNonAtomic(m_dataArray, (short) 0, ARRAY_LENGTH, (byte) 0);
-
-            m_TwineCipher = TwineCipher.getInstance(TwineCipher.TWINE_CIPHER_80,Arrays.copyOfRange(buffer,dataOffset,dataOffset+10) );   //Setting Twine Cipher to the first 10 bytes of user data from installation
-
+            Util.arrayCopyNonAtomic(buffer,dataOffset,m_dataArray,(short)0,(short)+10);
+            m_TwineCipher = TwineCipher.getInstance(TwineCipher.TWINE_CIPHER_80,m_dataArray);   //Setting Twine Cipher to the first 10 bytes of user data from installation
+            Util.arrayFillNonAtomic(m_dataArray, (short) 0, ARRAY_LENGTH, (byte) 0);
             m_ZorroCipher= ZorroCipher.getInstance();
 
             m_aesCipher = new JavaCardAES();
-            m_aesCipher.m_IV=Arrays.copyOfRange(buffer,dataOffset,dataOffset+16);
+            m_aesCipher.m_IV=new byte[16];
+            Util.arrayCopyNonAtomic(buffer,dataOffset,m_dataArray,(short)0,(short)16);
+            Util.arrayFillNonAtomic(m_dataArray, (short) 0, ARRAY_LENGTH, (byte) 0);
             m_aesCipher.m_IVOffset=0;
             m_aes_key = new byte[16];
             Util.arrayCopyNonAtomic(buffer,dataOffset,m_aes_key,(short)0,(short)16);

@@ -69,7 +69,8 @@ public class SimpleAPDU {
         System.out.println("Symmetric Block Ciphers: ");
         System.out.println("1)TwineCipher: ");
         System.out.println("Setting Key: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x30,plain));
+        byte[] key=Util.hexStringToByteArray("00112233445566778899");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x30,plain));
 
 
         System.out.println("2)ZorroCipher: ");
