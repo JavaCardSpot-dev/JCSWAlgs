@@ -16,9 +16,10 @@ From https://github.com/petrs/JCSWAlgs
 
 From https://github.com/albertocarp/Primitives_SmartCard
 - TwineCipher
-- ZorroCipher
+- AES
 - SHA3Keccak
-- UProve(:information_source: **Refer to issue**)
+- SAH-2
+
 
 
 All algorithms are allows to reuse already allocated cryptographic primitives and RAM memory arrays to decrease memory footprint. Allocation of the algorithm is therefore performed differently from native primitives (e.g., SWAES.getInstance() instead of Cipher.getInstance() is required).
