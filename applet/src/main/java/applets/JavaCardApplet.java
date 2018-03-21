@@ -111,8 +111,8 @@ public class JavaCardApplet  extends Applet
             case IConsts.OFFSET_INS_LIGHT:
                 processLight(apdu);
                 return;
-            case IConsts.OFFSET_INS_TEST:
-                processTest(apdu);
+            case IConsts.OFFSET_INS_RSAOAEP:
+                processRSAOEAP(apdu);
                 return;
             case IConsts.OFFSET_INS_HASH:
                 processHash(apdu);
@@ -121,7 +121,28 @@ public class JavaCardApplet  extends Applet
                 break;
         }
     }
-
+    short m_wrapLen = 0;
+    byte dataLen = 0;
+    void processRSAOEAP(APDU apdu) {
+        byte[] buffer = apdu.getBuffer();
+        dataLen = buffer[ISO7816.OFFSET_LC];
+       // short len = apdu.setIncomingAndReceive();
+        Util.arrayCopyNonAtomic(buffer,ISO7816.OFFSET_CDATA,m_ramArray,(short)0,dataLen);
+        if (buffer[ISO7816.OFFSET_P1] == RSAOAEP_ENC) {
+            m_rsaOAEP.init(m_rsaPubKey, Cipher.MODE_ENCRYPT);
+            m_wrapLen = m_rsaOAEP.doFinal(m_ramArray, (short) 0, dataLen, m_ramArray2, (short) 0);
+            Util.arrayCopyNonAtomic(m_ramArray2,(short)0,buffer,ISO7816.OFFSET_CDATA,(short)32);
+            apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, (short)32);
+            return;
+        }
+        if (buffer[ISO7816.OFFSET_P1] == RSAOAEP_DEC) {
+            // Assumption: properly wrapped data in m_ramArray2 from previous run of Test_RSAOEAP_performance encode
+            m_rsaOAEP.init(m_rsaPrivKey, Cipher.MODE_DECRYPT);
+            short unwrapLen = m_rsaOAEP.doFinal(m_ramArray2, (short) 0, m_wrapLen, m_ramArray, (short) 0);
+            Util.arrayCopyNonAtomic(m_ramArray,(short)0,buffer,ISO7816.OFFSET_CDATA,(short)16);
+            apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, unwrapLen);
+        }
+    }
 
 
     private void processLight(APDU apdu)

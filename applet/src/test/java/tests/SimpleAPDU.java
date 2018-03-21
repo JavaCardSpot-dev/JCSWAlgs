@@ -44,7 +44,7 @@ public class SimpleAPDU {
     public static ResponseAPDU  demoSingleCommand() throws Exception {
 
         // CardManager abstracts from real or simulated card, provide with applet AID
-        final CardManager cardMngr = new CardManager(true, APPLET_AID);
+        final CardManager cardMngr = new CardManager(false, APPLET_AID);
 
         // Get default configuration for subsequent connection to card (personalized later)
         final RunConfig runCfg = RunConfig.getDefaultConfig();
@@ -57,7 +57,7 @@ public class SimpleAPDU {
         runCfg.setTestCardType(RunConfig.CARD_TYPE.JCARDSIMLOCAL); // Use local simulator
         runCfg.setbReuploadApplet(true);
         runCfg.setInstallData(install_data);
-        byte[] plain=Util.hexStringToByteArray("0123456789ABCDEF");
+
         System.out.print("Connecting to card...");
         if (!cardMngr.Connect(runCfg)) {
             System.out.println(" Failed.");
@@ -70,31 +70,55 @@ public class SimpleAPDU {
         System.out.println("1)TwineCipher: ");
         System.out.println("Setting Key: ");
         byte[] key=Util.hexStringToByteArray("00112233445566778899");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x30,plain));
-
-
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x30,key));
+        System.out.println("Encrypting: ");
+        byte[] plain=Util.hexStringToByteArray("0123456789ABCDEF");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x30,plain));
+        System.out.println("Decrypting: ");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x30,response.getData()));
         System.out.println("2)ZorroCipher: ");
-        System.out.println("3)AES256");
+        System.out.println("Encrypting: ");
+        plain=Util.hexStringToByteArray("5656565656565656565656565656565600000000000000000000000000000000");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x33,plain));
+        System.out.println("Decrypting: ");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x33,response.getData()));
+
+        System.out.println("3)AES128");
+        System.out.println("Setting Key: ");
+        key=Util.hexStringToByteArray("0000000000000000000000000000000000000000000000000000000000000000");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,key));
+        System.out.println("Encrypting: ");
+        plain=Util.hexStringToByteArray("f34481ec3cc627bacd5dc3fb08f273e6");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x32,plain));
+        System.out.println("Decrypting: ");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x32,response.getData()));
 
 
 
         System.out.println("RSA OAEP: ");
+        System.out.println("Encode: ");
+        plain=Util.hexStringToByteArray("11111122222211");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x25,0x51,0x00,plain));
+        System.out.println("Decode: ");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x25,0x52,0x00,response.getData()));
+
 
         System.out.println("Hash: ");
-
-
-
-        byte[] aes_key_iv = Util.hexStringToByteArray("00000011223344556677889900000000000000000000000000000000000000000000");
-        //ResponseAPDU response = cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,aes_key_iv));
+        plain=Util.hexStringToByteArray("616263");
+       //ResponseAPDU response = cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,aes_key_iv));
         //System.out.println(response);
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x30,plain));
+        System.out.println("Keccak_160: ");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x40,0x00,plain));
+        System.out.println("KECCAK_r144c256: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x41,0x00,plain));
+        System.out.println("KECCAK_r128c272: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x42,0x00,plain));
+        System.out.println("KECCAK_r544c256: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x43,0x00,plain));
+        System.out.println("KECCAK_r512c288: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x44,0x00,plain));
+        System.out.println("KECCAK_r256c544: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x46,0x00,plain));
-
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x32,response.getData()));
         return response;
 
 
