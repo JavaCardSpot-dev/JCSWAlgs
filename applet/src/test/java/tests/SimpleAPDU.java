@@ -67,6 +67,8 @@ public class SimpleAPDU {
         // Connect to first available card
         // NOTE: selects target applet based on AID specified in CardManager constructor
         System.out.println("Symmetric Block Ciphers: ");
+
+
         System.out.println("1)TwineCipher: ");
         System.out.println("Setting Key: ");
         byte[] key=Util.hexStringToByteArray("00112233445566778899");
@@ -76,6 +78,7 @@ public class SimpleAPDU {
         response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x30,plain));
         System.out.println("Decrypting: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x30,response.getData()));
+
         System.out.println("2)ZorroCipher: ");
         System.out.println("Encrypting: ");
         plain=Util.hexStringToByteArray("5656565656565656565656565656565600000000000000000000000000000000");
@@ -104,7 +107,7 @@ public class SimpleAPDU {
 
 
         System.out.println("Hash: ");
-        plain=Util.hexStringToByteArray("616263");
+        plain=Util.hexStringToByteArray("616263");  //only 50 bytes possible
        //ResponseAPDU response = cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,aes_key_iv));
         //System.out.println(response);
         System.out.println("Keccak_160: ");
@@ -119,6 +122,8 @@ public class SimpleAPDU {
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x44,0x00,plain));
         System.out.println("KECCAK_r256c544: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x46,0x00,plain));
+        System.out.println("SHA512: ");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x47,0x00,plain));
         return response;
 
 
