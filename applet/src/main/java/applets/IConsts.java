@@ -17,10 +17,9 @@ public interface IConsts
 	public static final byte OFFSET_CLA_APPLICATION = (byte) 0x00;
 	
 	public static final byte OFFSET_INS_LIGHT =  (byte) 0x11;
-	public static final byte OFFSET_INS_SYSTEM = (byte) 0x21;
-	public static final byte OFFSET_INS_UPROVE = (byte) 0x22;
-	public static final byte OFFSET_INS_TEST   = (byte) 0x23; 
+	public static final byte OFFSET_INS_TEST   = (byte) 0x23;
 	public static final byte OFFSET_INS_HASH   = (byte) 0x24;
+	public static final byte OFFSET_INS_RSAOAEP   = (byte) 0x25;
 
 	public static final byte OFFSET_P1_ENC 	 = (byte) 0x21;
 	public static final byte OFFSET_P1_DEC	 = (byte) 0x22;
@@ -33,48 +32,9 @@ public interface IConsts
 	 */
 	public static final byte TWINE_CIPHER_80=0x30;
 	public static final byte TWINE_CIPHER_128=0x31;
-	public static final byte LBLOCK_CIPHER=0x32;
 	public static final byte ZORRO_CIPHER=0x33;
-	public static final byte PICOLLO_CIPHER=0x34;
-	public static final byte RECTANGLE_CIPHER=0x35;
-	
-	
-	/**
-	 * For U Prove cipher
-	 */
-	public static final byte CMD_SET_E_I = 0x50;
-	public static final byte CMD_GET_E_I = 0x51;
-	
-	public static final byte CMD_SET_PUB_KEY = 0x52;
-	public static final byte CMD_GET_PUB_KEY = 0x53;
-	
-	public static final byte CMD_SET_UIDP = 0x54;
-	public static final byte CMD_GET_UIDP = 0x55;
-	
-	public static final byte CMD_GET_PQG = 0x56;
-	public static final byte CMD_SET_PQG = 0x57;
-	
-	public static final byte CMD_GET_UIDH = 0x58;
-	public static final byte CMD_SET_UIDH = 0x59;
-	
-	public static final byte CMD_GET_ATTR_COUNT = 0x60;
-	public static final byte CMD_SET_ATTR_COUNT = 0x49;
-	
-	public static final byte CMD_GET_ATTR_VAL   = 0x61;
-	public static final byte CMD_SET_ATTR_VAL   = 0x62;
-	
-	public static final byte CMD_SET_ATTR_VAL_PUBLIC =0x63;
-	
-	public static final byte CMD_PRECOMPUTE_INPUTS = 0x64;
-	public static final byte CMD_SET_TI =0x65;
-	public static final byte CMD_GET_TI =0x66;
-	public static final byte CMD_SET_PI=0x67;
-	public static final byte CMD_GET_PI=0x68;
-	
-	public static final byte CMD_GET_GAMMA = 0x69;
-	public static final byte CMD_TEST_FIRST_MESSAGE=0x70;
-	public static final byte CMD_TEST_SECOND_MESSAGE=0x71;
-	public static final byte CMD_TEST_THIRD_MESSAGE=0x72;
+	public static final byte AES_CIPHER=0x32;
+
 	
 	public static final byte HASH_KECCAK_160  = 0x40;
 	public static final byte HASH_KECCAK_r144c256  = 0x41;
@@ -82,8 +42,10 @@ public interface IConsts
 	public static final byte HASH_KECCAK_r544c256 = 0x43;
 	public static final byte HASH_KECCAK_r512c288 = 0x44;
 	public static final byte HASH_KECCAK_r256c544 = 0x46;
-	
-	
+	public static final byte HASH_SHA512 = 0x47;
+
+	public static final byte RSAOAEP_ENC 	 = (byte) 0x51;
+	public static final byte RSAOAEP_DEC	 = (byte) 0x52;
 	public static final byte HASH = 0x00;
 	
 	

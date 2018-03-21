@@ -1,9 +1,10 @@
 package tests;
 
-import applets.TestSWAlgsApplet;
+import applets.JavaCardApplet;
 import cardTools.CardManager;
 import cardTools.RunConfig;
 import cardTools.Util;
+import com.google.common.primitives.Bytes;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CommandAPDU;
@@ -34,7 +35,7 @@ public class SimpleAPDU {
         try {
             demoSingleCommand();
         } catch (Exception ex) {
-            System.out.println("Exception : " + ex);
+            System.out.println("Exception : " + ex.getMessage());
         }
     }
 	
@@ -47,27 +48,37 @@ public class SimpleAPDU {
 
         // Get default configuration for subsequent connection to card (personalized later)
         final RunConfig runCfg = RunConfig.getDefaultConfig();
-
+        byte[] install_data=Util.hexStringToByteArray("00000000112233445566778899000000112233445566778899");
         // A) If running on physical card
         // runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
 
         // B) If running in the simulator
-        runCfg.setAppletToSimulate(TestSWAlgsApplet.class); // main class of applet to simulate
+        runCfg.setAppletToSimulate(JavaCardApplet.class); // main class of applet to simulate
         runCfg.setTestCardType(RunConfig.CARD_TYPE.JCARDSIMLOCAL); // Use local simulator
         runCfg.setbReuploadApplet(true);
-        runCfg.setInstallData(new byte[15]);
-
+        runCfg.setInstallData(install_data);
+        byte[] plain=Util.hexStringToByteArray("0123456789ABCDEF");
         System.out.print("Connecting to card...");
         if (!cardMngr.Connect(runCfg)) {
             System.out.println(" Failed.");
         }
         System.out.println(" Done.");
-
         // Connect to first available card
         // NOTE: selects target applet based on AID specified in CardManager constructor
-        final ResponseAPDU response = cardMngr.transmit(new CommandAPDU(TEST_RSAOEAP));
+
+        byte[] aes_key_iv = Util.hexStringToByteArray("00000011223344556677889900000000000000000000000000000000000000000000");
+        //ResponseAPDU response = cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,aes_key_iv));
         //System.out.println(response);
+        ResponseAPDU response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x30,plain));
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x41,0x00,plain));
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x42,0x00,plain));
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x43,0x00,plain));
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x44,0x00,plain));
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x46,0x00,plain));
+
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x32,response.getData()));
         return response;
+
 
 
     }
