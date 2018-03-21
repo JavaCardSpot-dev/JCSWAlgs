@@ -318,6 +318,7 @@ public class JavaCardApplet  extends Applet
                 m_Sha512.doFinal(m_ramArray, (short)0, count_data, buf,(ISO7816.OFFSET_CDATA));
                 //Sha512.resetUpdateDoFinal(m_ramArray, (short)0, count_data, buf,(ISO7816.OFFSET_CDATA));
                 apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, (short)MessageDigest.LENGTH_SHA_512);
+                return;
             }
             default:
                 break;
