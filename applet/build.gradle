@@ -75,7 +75,7 @@ javacard {
             //noinspection GroovyAssignabilityCheck
 			//4C6162616B4170706C6574
             applet {
-                className 'applets.TestSWAlgsApplet'
+                className 'applets.JavaCardApplet'
                 aid '4c:61:62:61:6B:41:70:70:6C:65:74'
             }
 
