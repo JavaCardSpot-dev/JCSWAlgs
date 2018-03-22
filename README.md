@@ -25,7 +25,9 @@ From https://github.com/albertocarp/Primitives_SmartCard
 All algorithms are allows to reuse already allocated cryptographic primitives and RAM memory arrays to decrease memory footprint. Allocation of the algorithm is therefore performed differently from native primitives (e.g., SWAES.getInstance() instead of Cipher.getInstance() is required).
 
 
-Usage - 
+Usage-
+-----
+
 Twine_80
 -----
 ````java
@@ -80,6 +82,31 @@ AES Cipher
 
     // encrypt again with first key
     aesCipher.AESEncryptBlock(data_to_decrypt_2, start_offset_of_data, array_for_round_keys_1);
+````
+
+SHA512(SHA2)
+-----
+````java
+//init
+Sha512.init()
+
+//reset
+Sha512.reset()
+
+//update
+Sha512.update(=inBuff, inOffset, inLength)
+
+//final
+Sha512.doFinal(inBuff, inOffset, inLength, outBuff,outOffset)
+
+````
+SHA3
+-----
+````java
+Sha3Keccak cipherHash = Sha3Keccak.getInstance(HASH_ALG);
+cipherHash.postInit();
+len_data  = cipherHash.process(HASH, buf, bufOff, count_data);
+
 ````
 
 RSA OAEP
