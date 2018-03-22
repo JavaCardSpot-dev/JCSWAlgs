@@ -131,3 +131,9 @@ unwrapLen = m_rsaOAEP.doFinal(inArray, baseOffset, wrapLen, outArray, baseOffset
 Based on gardle template available at https://github.com/crocs-muni/javacard-gradle-template-edu
 
 
+JCSWAlgs  Copyright (C) 2018,  Rao Arvind Mallari, (Singh Ram, Singh Bhupinder & Svenda Petr.)
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions covered by GPLv3.
+
+
