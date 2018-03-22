@@ -17,16 +17,8 @@ import java.util.ArrayList;
  */
 public class SimpleAPDU {
 
-    private final static byte SELECT_TESTAPPLET[] = {(byte) 0x00, (byte) 0xa4, (byte) 0x04, (byte) 0x00, (byte) 0x0b, 
-        (byte) 0x4C, (byte) 0x61, (byte) 0x62, (byte) 0x61, (byte) 0x6B,
-        (byte) 0x41, (byte) 0x70, (byte) 0x70, (byte) 0x6C, (byte) 0x65, (byte) 0x74};
-    private static byte APPLET_AID[] = {(byte) 0x4C, (byte) 0x61, (byte) 0x62, (byte) 0x61, (byte) 0x6B,
-        (byte) 0x41, (byte) 0x70, (byte) 0x70, (byte) 0x6C, (byte) 0x65, (byte) 0x74};
-
-    private static byte TEST_RSAOEAP[] = {(byte) 0xB0, (byte) 0x5A, (byte) 0x00, (byte) 0x00, (byte) 0x00};
-    private static byte TEST_RSAOEAP_PERF_ENCODE[] = {(byte) 0xB0, (byte) 0x5B, (byte) 0x01, (byte) 0x00, (byte) 0x02, (byte) 0x00, (byte) 0x10};
-    private static byte TEST_RSAOEAP_PERF_DECODE[] = {(byte) 0xB0, (byte) 0x5C, (byte) 0x02, (byte) 0x00, (byte) 0x02, (byte) 0x00, (byte) 0xff};
-    
+    private final static byte SELECT_TESTAPPLET[] = Util.hexStringToByteArray("5365637572654a617661");
+    private static byte APPLET_AID[] = Util.hexStringToByteArray("4C6162616B4170706C6574");
     static short getShort(byte[] array, int offset) {
         return (short) (((array[offset] & 0xFF) << 8) | (array[offset + 1] & 0xFF));        
     }
@@ -50,7 +42,7 @@ public class SimpleAPDU {
         final RunConfig runCfg = RunConfig.getDefaultConfig();
         byte[] install_data=Util.hexStringToByteArray("00000000112233445566778899000000112233445566778899");
         // A) If running on physical card
-        // runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
+        //runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
 
         // B) If running in the simulator
         runCfg.setAppletToSimulate(JavaCardApplet.class); // main class of applet to simulate

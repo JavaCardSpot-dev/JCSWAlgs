@@ -25,7 +25,7 @@ public class JavaCardApplet  extends Applet
     TwineCipher m_TwineCipher = null;
     ZorroCipher m_ZorroCipher = null;
     JavaCardAES m_aesCipher = null;
-    InitializedMessageDigest m_Sha512 = null;
+    MessageDigest m_Sha512 = null;
 
     private byte[] m_aes_key=null;
     protected JavaCardApplet(byte[] buffer, short offset, byte length)
@@ -85,7 +85,7 @@ public class JavaCardApplet  extends Applet
             m_aesCipher.m_IVOffset=0;
             m_aes_key = new byte[16];
             Util.arrayCopyNonAtomic(buffer,dataOffset,m_aes_key,(short)0,(short)16);
-            m_Sha512 = MessageDigest.getInitializedMessageDigestInstance(MessageDigest.ALG_SHA_512, false);
+            m_Sha512 = MessageDigest.getInstance(MessageDigest.ALG_SHA_512, false);
             Sha512.init();
         }
 
@@ -314,9 +314,8 @@ public class JavaCardApplet  extends Applet
             {
                 Util.arrayFillNonAtomic(m_ramArray, (short) 0, ARRAY_LENGTH, (byte) 0);
                 Util.arrayCopyNonAtomic(buf,(ISO7816.OFFSET_CDATA),m_ramArray,(short)0,count_data);
-                m_Sha512.reset();
-                m_Sha512.doFinal(m_ramArray, (short)0, count_data, buf,(ISO7816.OFFSET_CDATA));
-                //Sha512.resetUpdateDoFinal(m_ramArray, (short)0, count_data, buf,(ISO7816.OFFSET_CDATA));
+                Sha512.reset();
+                Sha512.doFinal(m_ramArray, (short)0, count_data,buf,ISO7816.OFFSET_CDATA);
                 apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, (short)MessageDigest.LENGTH_SHA_512);
                 return;
             }
