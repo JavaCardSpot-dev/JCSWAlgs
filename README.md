@@ -12,14 +12,14 @@ The Suite of software reimplementations of selected cryptographic algorithms pot
 Following algorithms are included at the moment:
 
 From https://github.com/petrs/JCSWAlgs
--RSA-Optimal Asymmetric Encryption Padding (RSA-OAEP) 
+-RSA-Optimal Asymmetric Encryption Padding (RSA-OAEP) , OAEP (EUROCRYPT-1994)
 
 From https://github.com/albertocarp/Primitives_SmartCard
-- AES
+- AES (NIST,2001)
 - TwineCipher (FSE2010)
 - ZorroCipher (CHES2013)
-- SHA3Keccak
-- SHA-512
+- SHA-3Keccak  (NIST, 2015)
+- SHA-512(SHA-2) (NIST, 2001)
 
 
 All algorithms are allows to reuse already allocated cryptographic primitives and RAM memory arrays to decrease memory footprint. Allocation of the algorithm is therefore performed differently from native primitives (e.g., SWAES.getInstance() instead of Cipher.getInstance() is required).

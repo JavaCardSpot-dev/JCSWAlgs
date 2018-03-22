@@ -1,5 +1,5 @@
 package tests;
-
+// in applet we need to write the function for test
 import org.junit.Assert;
 import org.testng.annotations.*;
 
