@@ -99,7 +99,7 @@ public class SimpleAPDU {
 
 
         System.out.println("Hash: ");
-        plain=Util.hexStringToByteArray("616263");  //only 50 bytes possible
+        plain=Util.hexStringToByteArray("00");  //only 50 bytes possible
        //ResponseAPDU response = cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,aes_key_iv));
         //System.out.println(response);
         System.out.println("Keccak_160: ");
