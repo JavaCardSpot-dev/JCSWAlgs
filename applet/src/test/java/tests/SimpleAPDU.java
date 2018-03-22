@@ -116,6 +116,12 @@ public class SimpleAPDU {
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x46,0x00,plain));
         System.out.println("SHA512: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x47,0x00,plain));
+
+        System.out.println("Tests: ");
+        plain=Util.hexStringToByteArray("11111122222211");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x23,0x00,0x00,plain));
+
+
         return response;
 
 

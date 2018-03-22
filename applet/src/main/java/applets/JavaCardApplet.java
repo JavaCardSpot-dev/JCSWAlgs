@@ -25,9 +25,8 @@ public class JavaCardApplet  extends Applet
     TwineCipher m_TwineCipher = null;
     ZorroCipher m_ZorroCipher = null;
     JavaCardAES m_aesCipher = null;
-    MessageDigest m_Sha512 = null;
-
     private byte[] m_aes_key=null;
+
     protected JavaCardApplet(byte[] buffer, short offset, byte length)
     {
         short dataOffset = offset;
@@ -85,7 +84,6 @@ public class JavaCardApplet  extends Applet
             m_aesCipher.m_IVOffset=0;
             m_aes_key = new byte[16];
             Util.arrayCopyNonAtomic(buffer,dataOffset,m_aes_key,(short)0,(short)16);
-            m_Sha512 = MessageDigest.getInstance(MessageDigest.ALG_SHA_512, false);
             Sha512.init();
         }
 
@@ -119,6 +117,9 @@ public class JavaCardApplet  extends Applet
                 return;
             case IConsts.OFFSET_INS_HASH:
                 processHash(apdu);
+                return;
+            case IConsts.OFFSET_INS_TEST:
+                processTest(apdu);
                 return;
             default:
                 break;
@@ -249,6 +250,7 @@ public class JavaCardApplet  extends Applet
                 break;
 
         }
+        m_Instance=null;
     }
 
     private void processHash(APDU apdu)

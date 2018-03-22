@@ -62,7 +62,7 @@ public abstract class Sha3Keccak implements IConsts
 			case IConsts.HASH_KECCAK_r512c288:
 				return Sha3Keccak_r512c288.getInstance();
 			case IConsts.HASH_KECCAK_r256c544:
-				return Sha3Keccak_r512c288.getInstance();
+				return Sha3Keccak_r256c544.getInstance();
 				
 		}
 		ISOException.throwIt(ISO7816.SW_FUNC_NOT_SUPPORTED);;
