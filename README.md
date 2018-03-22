@@ -12,13 +12,14 @@ The Suite of software reimplementations of selected cryptographic algorithms pot
 Following algorithms are included at the moment:
 
 From https://github.com/petrs/JCSWAlgs
-- Optimal Asymmetric Encryption Padding (OAEP) 
+-RSA-Optimal Asymmetric Encryption Padding (RSA-OAEP) 
 
 From https://github.com/albertocarp/Primitives_SmartCard
-- TwineCipher
 - AES
+- TwineCipher (FSE2010)
+- ZorroCipher (CHES2013)
 - SHA3Keccak
-- SAH-2
+- SHA-512
 
 
 
