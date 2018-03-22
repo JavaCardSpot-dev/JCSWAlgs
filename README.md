@@ -106,6 +106,8 @@ SHA3
 Sha3Keccak cipherHash = Sha3Keccak.getInstance(HASH_ALG);
 cipherHash.postInit();
 len_data  = cipherHash.process(HASH, buf, bufOff, count_data);
+//Hash_ALG = IConsts.HASH_KECCAK_160, IConsts.HASH_KECCAK_r144c256, IConsts.HASH_KECCAK_r128c272
+//			 IConsts.HASH_KECCAK_r544c256,IConsts.HASH_KECCAK_r512c288, IConsts.HASH_KECCAK_r256c544,
 
 ````
 
