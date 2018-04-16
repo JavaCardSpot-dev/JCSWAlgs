@@ -81,19 +81,19 @@ public class SimpleAPDU {
         response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x33,plain));
         System.out.println("Decrypting: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x33,response.getData()));
+
+    //    System.out.println("3)AES128");
+    //    System.out.println("Setting Key: ");
+    //    key=Util.hexStringToByteArray("0000000000000000000000000000000000000000000000000000000000000010");
+    //    response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,key));
+    //    System.out.println("Encrypting: ");
+    //    plain=Util.hexStringToByteArray("f34481ec3cc627bacd5dc3fb08f273e6");
+    //    response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x32,plain));
+    //    System.out.println("Decrypting: ");
+    //    response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x32,response.getData()));
+
+
 /*
-        System.out.println("3)AES128");
-        System.out.println("Setting Key: ");
-        key=Util.hexStringToByteArray("0000000000000000000000000000000000000000000000000000000000000000");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,key));
-        System.out.println("Encrypting: ");
-        plain=Util.hexStringToByteArray("f34481ec3cc627bacd5dc3fb08f273e6");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x32,plain));
-        System.out.println("Decrypting: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x32,response.getData()));
-
-
-
         System.out.println("RSA OAEP: ");
         System.out.println("Encode: ");
         plain=Util.hexStringToByteArray("11111122222211");

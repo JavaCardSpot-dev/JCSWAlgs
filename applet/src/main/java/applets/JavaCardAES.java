@@ -74,7 +74,9 @@ public class JavaCardAES {
     // NOTE THAT ALGORITHM WILL NOT BE BINARY COMPATIBLE WITH AES TEST VECTORS ANYMORE
     public static byte N_ROUNDS    		= (byte) 10;
 
-    final static byte rcon[] = {(byte) 0x01, (byte) 0x02, (byte) 0x04, (byte) 0x08, (byte) 0x10, (byte) 0x20, (byte) 0x40, (byte) 0x80, (byte) 0x1b, (byte) 0x36};
+    //final static byte rcon[] = {(byte) 0x01, (byte) 0x02, (byte) 0x04, (byte) 0x08, (byte) 0x10, (byte) 0x20, (byte) 0x40, (byte) 0x80, (byte) 0x1b, (byte) 0x36};
+
+     final static byte rcon[] = {(byte) 0xaa, (byte) 0xab, (byte) 0xac, (byte) 0xad, (byte) 0xae, (byte) 0xaf, (byte) 0xba, (byte) 0xbb, (byte) 0xbc, (byte) 0xbd};
 
     // shifts[0..3] -> ENCRYPT, shifts[4..7] ... DECRYPT
     final static byte shifts[] = { 0, 1, 2, 3, 0, 3, 2, 1};
