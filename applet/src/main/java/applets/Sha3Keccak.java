@@ -12,7 +12,7 @@ public abstract class Sha3Keccak implements IConsts
 	protected short KECCAK_STATE_SIZE_BITS;
 	protected short KECCAK_NUMBER_OF_ROUNDS;
 	protected short KECCAK_SEC_LEVEL = 80;
-	protected short PROCESSOR_WORD = 16;
+	protected short PROCESSOR_WORD = 8;
 	protected short KECCAK_CAPACITY;
 	protected short KECCAK_RATE;
 	protected short KECCAK_STATE_SIZE_WORDS;

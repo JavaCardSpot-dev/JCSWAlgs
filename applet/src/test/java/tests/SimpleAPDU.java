@@ -1,6 +1,6 @@
 package tests;
 
-import applets.JavaCardApplet;
+import applets.CipherApplet;
 import cardTools.CardManager;
 import cardTools.RunConfig;
 import cardTools.Util;
@@ -45,7 +45,7 @@ public class SimpleAPDU {
         //runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
 
         // B) If running in the simulator
-        runCfg.setAppletToSimulate(JavaCardApplet.class); // main class of applet to simulate
+        runCfg.setAppletToSimulate(CipherApplet.class); // main class of applet to simulate
         runCfg.setTestCardType(RunConfig.CARD_TYPE.JCARDSIMLOCAL); // Use local simulator
         runCfg.setbReuploadApplet(true);
         runCfg.setInstallData(install_data);
@@ -59,25 +59,29 @@ public class SimpleAPDU {
         // Connect to first available card
         // NOTE: selects target applet based on AID specified in CardManager constructor
         System.out.println("Symmetric Block Ciphers: ");
-
+        byte[] key;
+        byte[] plain;
 
         System.out.println("1)TwineCipher: ");
         System.out.println("Setting Key: ");
-        byte[] key=Util.hexStringToByteArray("00112233445566778899");
+        key=Util.hexStringToByteArray("00112233445566778899");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x30,key));
         System.out.println("Encrypting: ");
-        byte[] plain=Util.hexStringToByteArray("0123456789ABCDEF");
+        plain=Util.hexStringToByteArray("0123456789ABCDEF");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x30,plain));
         System.out.println("Decrypting: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x30,response.getData()));
 
         System.out.println("2)ZorroCipher: ");
+        System.out.println("Initializing: ");
+        key=Util.hexStringToByteArray("00112233445599778899");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x33,key));
         System.out.println("Encrypting: ");
-        plain=Util.hexStringToByteArray("5656565656565656565656565656565600000000000000000000000000000000");
+        plain=Util.hexStringToByteArray("56565656565656565656565656565656");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x33,plain));
         System.out.println("Decrypting: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x33,response.getData()));
-
+/*
         System.out.println("3)AES128");
         System.out.println("Setting Key: ");
         key=Util.hexStringToByteArray("0000000000000000000000000000000000000000000000000000000000000000");
@@ -113,7 +117,7 @@ public class SimpleAPDU {
         System.out.println("KECCAK_r128c272: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x42,0x00,plain));
         System.out.println("KECCAK_r544c256: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x43,0x00,plain));
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x43,0x00,plain_max));
         System.out.println("KECCAK_r512c288: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x44,0x00,plain));
         System.out.println("KECCAK_r256c544: ");
@@ -124,7 +128,7 @@ public class SimpleAPDU {
         System.out.println("Tests: ");
         plain=Util.hexStringToByteArray("11111122222211");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x23,0x00,0x00,plain));
-
+*/
 
         return response;
 

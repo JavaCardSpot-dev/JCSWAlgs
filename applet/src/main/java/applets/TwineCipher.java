@@ -4,23 +4,35 @@ import javacard.framework.ISO7816;
 import javacard.framework.ISOException;
 import javacard.framework.JCSystem;
 import javacard.framework.Util;
+import javacard.security.CryptoException;
+import javacard.security.DESKey;
+import javacard.security.Key;
+import javacard.security.KeyBuilder;
+import javacardx.crypto.Cipher;
 import javacardx.crypto.KeyEncryption;
 /**
  * The TWINE Cipher implementation
  * @author Alberto-PC
  *
  */
-public class TwineCipher implements IConsts{
+public class TwineCipher extends Cipher implements IConsts {
 	
 	/**
 	 * The 80 bits of cipher twine
 	 */
 	public static final short MAX_MEMORY_TEMPORARY=32;
 	private static  TwineCipher ref_twineCipher_80 = null;
-	private static  TwineCipher ref_twineCipher_128 = null;
-	public  byte[] temp   =  JCSystem.makeTransientByteArray(MAX_MEMORY_TEMPORARY,JCSystem.CLEAR_ON_DESELECT);
-	public  byte[] rk 	= JCSystem.makeTransientByteArray((short) ((short)36*8),JCSystem.CLEAR_ON_DESELECT); 
-	 					//for storing the session key
+	private  byte[] temp   =  null;
+	private  byte[] temp2   =  null;
+	private  byte[] temp3   =  null;
+	private  byte[] rk 	= null;
+	 					//for storing the expanded key
+	DESKey cipherKey = null;
+	private byte mode;
+	private static ZorroCipher m_instance = null;
+	private boolean externalAccess;
+	private boolean isInitialized = false;
+	public static final byte ALG_TWINE = 19;
 	private final  byte  [] roundconst = 
 		{
 				0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x03, 0x06, 0x0c, 0x18, 0x30, 0x23, 0x05, 0x0a, 0x14, 0x28, 0x13, 0x26,
@@ -40,11 +52,6 @@ public class TwineCipher implements IConsts{
 					return ref_twineCipher_80;
 				ref_twineCipher_80 =  new TwineCipher(key,TWINE_CIPHER_80);
 				return ref_twineCipher_80;
-			case TWINE_CIPHER_128:
-				if(ref_twineCipher_128 != null)
-					return ref_twineCipher_128;
-				ref_twineCipher_128 =  new TwineCipher(key,TWINE_CIPHER_128);
-				return ref_twineCipher_128;
 			default:
 				ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
 		}
@@ -61,11 +68,6 @@ public class TwineCipher implements IConsts{
 					return ref_twineCipher_80;
 				ref_twineCipher_80 =  new TwineCipher();
 				return ref_twineCipher_80;
-			case TWINE_CIPHER_128:
-				if(ref_twineCipher_128 != null)
-					return ref_twineCipher_128;
-				ref_twineCipher_128 =  new TwineCipher();
-				return ref_twineCipher_128;
 			default:
 				ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
 		}
@@ -79,16 +81,18 @@ public class TwineCipher implements IConsts{
 			case TWINE_CIPHER_80:
 				expand80Key(key);
 				break;
-			case TWINE_CIPHER_128:
-				expand128Key(key);
-				break;
 			default:
 				ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
 		}
 	}
-	private TwineCipher()
+	protected TwineCipher()
 	{
-		
+		temp   =  JCSystem.makeTransientByteArray(MAX_MEMORY_TEMPORARY,JCSystem.CLEAR_ON_DESELECT);
+		temp2   =  JCSystem.makeTransientByteArray(MAX_MEMORY_TEMPORARY,JCSystem.CLEAR_ON_DESELECT);
+		temp3   =  JCSystem.makeTransientByteArray(MAX_MEMORY_TEMPORARY,JCSystem.CLEAR_ON_DESELECT);
+		rk 	= JCSystem.makeTransientByteArray((short) ((short)36*8),JCSystem.CLEAR_ON_DESELECT);
+
+
 	}
 	
 	private void expand80Key(byte[] key)
@@ -193,7 +197,7 @@ public class TwineCipher implements IConsts{
 		{
 			temp[(short)(24+iterator)] = (byte)(temp[(short)(2*iterator)] << 4 | temp[(short)(2*iterator + 1)]);
 		}
-		Util.arrayCopy(temp, (short)24, dest, (short)(ISO7816.OFFSET_CDATA), (short)8);
+		Util.arrayCopy(temp, (short)24, dest, (short)0, (short)8);
 		return temp; // returns bytes from 24 to 32
 	}
 	public byte[] decrypt(byte[] src,byte[] dest,short len_src)
@@ -232,7 +236,7 @@ public class TwineCipher implements IConsts{
 		{
 			temp[(short)(24+iterator)] = (byte)(temp[(short)(2*iterator)] << 4 | temp[(short)(2*iterator + 1)]);
 		}
-		Util.arrayCopy(temp, (short)24, dest, (short)(ISO7816.OFFSET_CDATA), (short)8);
+		Util.arrayCopy(temp, (short)24, dest, (short)0, (short)8);
 		return temp; // returns bytes from 24 to 32 indexes
 	}
 
@@ -288,4 +292,71 @@ public class TwineCipher implements IConsts{
 		temp[(short)(2*9)] = (byte)((short) (key[9] & 0x00FF) >> 4);
 		temp[(short)(2*9 + 1)] = (byte)((short) (key[9] & 0x00FF) & 0x0F); 	
     }
+
+	public short doFinal(byte[] inBuff, short inOffset, short inLength,
+						 byte[] outBuff, short outOffset) throws CryptoException {
+		//not initialized
+		if(!isInitialized)
+		{
+			throw new CryptoException(CryptoException.UNINITIALIZED_KEY);
+		}
+		if(inLength!=8)
+		{
+			throw new CryptoException(CryptoException.ILLEGAL_USE);
+		}
+		if(mode==Cipher.MODE_ENCRYPT)
+		{
+			cipherKey.getKey(temp2,(short)0);
+			expand80Key(temp2);
+			Util.arrayFillNonAtomic(temp2,(short)0,MAX_MEMORY_TEMPORARY, (byte) 0x00);
+			Util.arrayCopy(inBuff,inOffset,temp3,(short)0,inLength);
+			encrypt(temp3,temp2,inLength);
+			Util.arrayCopy(temp2, (short)0, outBuff, outOffset, (short)8);
+			//clearmem
+			return (short)8;
+		}
+		else //decrypt
+		{
+			cipherKey.getKey(temp2,(short)0);
+			expand80Key(temp2);
+			Util.arrayCopy(inBuff,inOffset,temp3,(short)0,inLength);
+			decrypt(temp3,temp2,inLength);
+			Util.arrayCopy(temp2, (short)0, outBuff, outOffset, (short)8);
+			return (short)8;
+		}
+	}
+	public byte getAlgorithm()
+	{
+		return ALG_TWINE;
+	}
+	//initkey is a deskey of length 16
+	//only the 10 bytes of the key is used by the algorithm
+	public void init(Key initkey, byte mode) throws CryptoException
+	{
+		if(!initkey.isInitialized())
+		{
+			throw new CryptoException(CryptoException.UNINITIALIZED_KEY);
+		}
+		if(initkey.getSize()!=10 && initkey.getType()!= KeyBuilder.TYPE_DES)
+		{
+			throw new CryptoException(CryptoException.ILLEGAL_VALUE);
+		}
+		this.mode =mode;
+		cipherKey = (DESKey)initkey;
+		isInitialized=true;
+	}
+
+	//not using this mode of init
+	//always throw exception
+	public void init(Key key, byte mode, byte[] buf, short bOff, short bLen) throws CryptoException
+	{
+		throw new CryptoException(CryptoException.INVALID_INIT);
+	}
+
+	//always throw crypto exception
+	//not using this function
+	public short update(byte[] arg0, short arg1, short arg2, byte[] arg3, short arg4) throws CryptoException {
+		throw new CryptoException(CryptoException.ILLEGAL_USE);
+	}
+
 }

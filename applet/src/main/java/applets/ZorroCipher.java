@@ -4,9 +4,10 @@ import javacard.framework.ISO7816;
 import javacard.framework.JCSystem;
 import javacard.framework.Util;
 import javacard.security.CryptoException;
+import javacard.security.DESKey;
 import javacard.security.Key;
+import javacard.security.KeyBuilder;
 import javacardx.crypto.Cipher;
-
 public class ZorroCipher extends Cipher implements IConsts
 {
 	
@@ -47,14 +48,22 @@ public class ZorroCipher extends Cipher implements IConsts
 			0x0E, (byte) 0xA2, 0x17, 0x56, (byte) 0xFA, 0x01, (byte) 0x99, (byte) 0xEF, 0x16, 0x75, (byte) 0xB2, (byte) 0xC4, (byte) 0xDE, (byte) 0x84, (byte) 0xD4, 0x5D,
 			0x3A, 0x1F, 0x44, 0x41, (byte) 0xB4, 0x6D, (byte) 0xD6, (byte) 0x9C, 0x55, 0x4E, 0x0A, 0x1B, (byte) 0x9A, 0x03, 0x6B, (byte) 0xB7
 		};
-	
+	public static final byte ALG_ZORRO = 18;
+	public static final byte LENGTH_ZORRO= 16;
 	public static final short MAX_MEMORY_TEMPORARY=40;
-	
+	private DESKey cipherKey;
+	/** Current mode. Possible values:
+	 * <code>Cipher.MODE_DECRYPT</code> or <code>Cipher.MODE_ENCRYPT</code>. */
+	private byte mode;
 	private static ZorroCipher m_instance = null;
-	
+	private boolean externalAccess;
+	private boolean isInitialized = false;
 	 // use 24 - 32 as temp copy
-	public  byte[] temp   =  JCSystem.makeTransientByteArray(MAX_MEMORY_TEMPORARY,JCSystem.CLEAR_ON_DESELECT);
-	
+	private byte[] temp   =  JCSystem.makeTransientByteArray(MAX_MEMORY_TEMPORARY,JCSystem.CLEAR_ON_DESELECT);
+	protected ZorroCipher()
+	{
+		//cipherKey= (DESKey)KeyBuilder.buildKey(KeyBuilder.TYPE_DES,(short)LENGTH_ZORRO,true);
+	}
 	byte mulGaloisField2_8(byte a,byte b)
 	{
 		byte p = 0;
@@ -330,28 +339,75 @@ public class ZorroCipher extends Cipher implements IConsts
 	    	}
 	 }
 
-	public short doFinal(byte[] arg0, short arg1, short arg2, byte[] arg3, short arg4) throws CryptoException {
-		// TODO Auto-generated method stub
-		return 0;
+	 //inlength only 16 allowed.
+	//should handle larger lengths and modes from the applet
+	//see example CipherApplet.java
+	public short doFinal(byte[] inBuff, short inOffset, short inLength,
+						 byte[] outBuff, short outOffset) throws CryptoException {
+		//not initialized
+		if(!isInitialized)
+		{
+			throw new CryptoException(CryptoException.UNINITIALIZED_KEY);
+		}
+		if(inLength!=16)
+		{
+			throw new CryptoException(CryptoException.ILLEGAL_USE);
+		}
+		if(mode==Cipher.MODE_ENCRYPT)
+		{
+			Util.arrayCopy(inBuff,inOffset,temp,(short)0,inLength);
+			cipherKey.getKey(temp,inLength);
+			zorroCompleteEnc(temp,(short)0,temp,(short) 16);
+			Util.arrayCopy(temp, (short)0, outBuff, outOffset, (short)16);
+			return (short)16;
+		}
+		else //decrypt
+		{
+			Util.arrayCopy(inBuff,inOffset,temp,(short)0,inLength);
+			cipherKey.getKey(temp,inLength);
+			zorroCompleteDec(temp,(short)0,temp,(short) 16);
+			Util.arrayCopy(temp, (short)0, outBuff, outOffset, (short)16);
+			return (short)16;
+		}
+	}
+	public byte getAlgorithm()
+	{
+		return ALG_ZORRO;
+	}
+	//initkey is a deskey of length 16
+	public void init(Key initkey, byte mode) throws CryptoException
+	{
+		if(!initkey.isInitialized())
+		{
+			throw new CryptoException(CryptoException.UNINITIALIZED_KEY);
+		}
+		if(initkey.getSize()!=16 && initkey.getType()!=KeyBuilder.TYPE_DES)
+		{
+			throw new CryptoException(CryptoException.ILLEGAL_VALUE);
+		}
+		this.mode =mode;
+		cipherKey = (DESKey)initkey;
+		isInitialized=true;
 	}
 
-	public byte getAlgorithm() {
-		// TODO Auto-generated method stub
-		return 0;
+	//not using this mode of init
+	//always throw exception
+	public void init(Key key, byte mode, byte[] buf, short bOff, short bLen) throws CryptoException
+	{
+		/*this.mode = mode;
+		if(bLen!=16)
+		{
+			throw new CryptoException(CryptoException.INVALID_INIT);
+		}
+		cipherKey.setKey(buf,bOff);
+		cipherKey=(DESKey)key;
+		isInitialized = true;*/
+		throw new CryptoException(CryptoException.INVALID_INIT);
 	}
 
-	public void init(Key arg0, byte arg1) throws CryptoException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void init(Key arg0, byte arg1, byte[] arg2, short arg3, short arg4) throws CryptoException {
-		// TODO Auto-generated method stub
-		
-	}
-
+	//always throw crypto exception
+	//not using this function
 	public short update(byte[] arg0, short arg1, short arg2, byte[] arg3, short arg4) throws CryptoException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new CryptoException(CryptoException.ILLEGAL_USE);
 	}
 }
