@@ -312,7 +312,6 @@ public class TwineCipher extends Cipher implements IConsts {
 			Util.arrayCopy(inBuff,inOffset,temp3,(short)0,inLength);
 			encrypt(temp3,temp2,inLength);
 			Util.arrayCopy(temp2, (short)0, outBuff, outOffset, (short)8);
-			//clearmem
 			return (short)8;
 		}
 		else //decrypt
@@ -337,7 +336,7 @@ public class TwineCipher extends Cipher implements IConsts {
 		{
 			throw new CryptoException(CryptoException.UNINITIALIZED_KEY);
 		}
-		if(initkey.getSize()!=10 && initkey.getType()!= KeyBuilder.TYPE_DES)
+		if(initkey.getSize()!=128 || initkey.getType()!= KeyBuilder.TYPE_DES)
 		{
 			throw new CryptoException(CryptoException.ILLEGAL_VALUE);
 		}

@@ -61,7 +61,7 @@ public class TestSWAlgsApplet extends javacard.framework.Applet
             m_ramArray = JCSystem.makeTransientByteArray(ARRAY_LENGTH, JCSystem.CLEAR_ON_RESET);
             m_ramArray2 = JCSystem.makeTransientByteArray(ARRAY_LENGTH, JCSystem.CLEAR_ON_RESET);
             
-            m_hash = MessageDigest.getInstance(MessageDigest.ALG_SHA_256, false);
+            m_hash = MessageDigest.getInstance(MessageDigest.ALG_SHA, false);
             m_secureRandom = RandomData.getInstance(RandomData.ALG_SECURE_RANDOM);
             m_rsaEngine = Cipher.getInstance(Cipher.ALG_RSA_PKCS1, false);
 

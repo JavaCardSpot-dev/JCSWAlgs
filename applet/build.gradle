@@ -51,7 +51,8 @@ final def JC304 = libsSdk + '/jc304_kit'
 final def JC305 = libsSdk + '/jc305u1_kit'
 
 // Which JavaCard SDK to use - select
-final def JC_SELECTED = JC304
+final def JC_SELECTED = JC212
+
 
 javacard {
 
@@ -70,41 +71,7 @@ javacard {
             packageName 'applets'
             version '0.1'
             aid '4c:61:62:61:6B:41:70:70'
-            output 'applets.cap'
-
-            //noinspection GroovyAssignabilityCheck
-			//4C6162616B4170706C6574
-            applet {
-                className 'applets.JavaCardApplet'
-                aid '4c:61:62:61:6B:41:70:70:6C:65:74'
-            }
-
-            //noinspection GroovyAssignabilityCheck
-            dependencies {
-                remote 'fr.bmartel:gplatform:2.1.1'
-            }
-        }
-    }
-}
-
-javacard {
-
-    //noinspection GroovyAssignabilityCheck
-    config {
-        jckit JC_SELECTED
-
-        // JCardSim automatically added by the javacard-gradle plugin
-        addSurrogateJcardSimRepo true
-        addImplicitJcardSim true
-        addImplicitJcardSimJunit true
-
-        //noinspection GroovyAssignabilityCheck
-        cap {
-			//4C6162616B417070
-            packageName 'applets'
-            version '0.1'
-            aid '4c:61:62:61:6B:41:70:70'
-            output 'applets.cap'
+            output 'CipherApplet.cap'
 
             //noinspection GroovyAssignabilityCheck
 			//4C6162616B4170706C6574

@@ -53,8 +53,26 @@ SPEED (GXP E64PK):
 
 package applets;
 import javacard.framework.*;
+import javacard.security.CryptoException;
+import javacard.security.DESKey;
+import javacard.security.Key;
+import javacard.security.KeyBuilder;
+import javacardx.crypto.Cipher;
 
-public class JavaCardAES {
+public class JavaCardAES extends Cipher {
+    public static final byte ALG_JCAES = 20;
+    public static final byte LEBGTH_JCAES= 16;
+    private DESKey cipherKey=null;
+    /** Current mode. Possible values:
+     * <code>Cipher.MODE_DECRYPT</code> or <code>Cipher.MODE_ENCRYPT</code>. */
+    private byte mode;
+    private boolean externalAccess;
+    private boolean isInitialized = false;
+    //ramarrays for roundkeys and IV
+    private byte[] aesRoundKeys =null;
+    private byte[] temp = null;
+
+
   final static short SW_IV_BAD                        = (short) 0x6709;   // BAD INICIALIZATION VECTOR
   final static short SW_CIPHER_DATA_LENGTH_BAD        = (short) 0x6710;   // BAD LENGTH OF DATA USED DURING CIPHER OPERATION
 
@@ -98,7 +116,7 @@ public class JavaCardAES {
     public byte       m_IV[] = null;
     public short      m_IVOffset = 0;
 
-    public JavaCardAES() {
+    protected JavaCardAES() {
       // ALLOCATE AND COMPUTE LOOKUP TABLES
       SBox = new byte[256];
       SiBox = new byte[256];
@@ -109,6 +127,10 @@ public class JavaCardAES {
 // ALOG_MUL     Alogtable_mul3 = JCSystem.makeTransientByteArray((short)256, JCSystem.CLEAR_ON_RESET);
       Logtable = new short[256];
       tempBuffer = JCSystem.makeTransientByteArray(STATELEN, JCSystem.CLEAR_ON_RESET);
+      temp= JCSystem.makeTransientByteArray((short)16, JCSystem.CLEAR_ON_RESET);
+      m_IV = new byte[16];
+      m_IVOffset=0;
+      aesRoundKeys = JCSystem.makeTransientByteArray((short)300, JCSystem.CLEAR_ON_RESET);
       MakeSBox();
     }
 
@@ -545,4 +567,82 @@ public class JavaCardAES {
 
         return true;
      }
+
+     //if initialized by this method the IV is set to 16 times 0x00
+    public void init(Key initkey, byte mode) throws CryptoException
+    {
+        if(!initkey.isInitialized())
+        {
+            throw new CryptoException(CryptoException.UNINITIALIZED_KEY);
+        }
+        if(initkey.getSize()!=128 || initkey.getType()!= KeyBuilder.TYPE_DES)
+        {
+            throw new CryptoException(CryptoException.ILLEGAL_VALUE);
+        }
+        this.mode =mode;
+        cipherKey = (DESKey)initkey;
+        Util.arrayFillNonAtomic(m_IV,(short)0,(short)16,(byte)0x00);
+        isInitialized=true;
+    }
+
+
+    //AES needs IV, init using this for user defined IV, first 16 bytes of buf used as IV
+    public void init(Key initkey, byte mode, byte[] buf, short bOff, short bLen) throws CryptoException {
+
+         if(!initkey.isInitialized())
+        {
+            throw new CryptoException(CryptoException.UNINITIALIZED_KEY);
+        }
+        if(initkey.getSize()!=16 && initkey.getType()!= KeyBuilder.TYPE_DES && bLen !=16)
+        {
+            throw new CryptoException(CryptoException.ILLEGAL_VALUE);
+        }
+        this.mode =mode;
+        cipherKey = (DESKey)initkey;
+        Util.arrayCopyNonAtomic(buf,bOff,m_IV,(short)0,bLen);
+        isInitialized=true;
+    }
+
+    public byte getAlgorithm() {
+        return ALG_JCAES;
+    }
+
+    public short doFinal(byte[] inBuff, short inOffset, short inLength,
+                         byte[] outBuff, short outOffset) throws CryptoException {
+        //not initialized
+        if(!isInitialized)
+        {
+            throw new CryptoException(CryptoException.UNINITIALIZED_KEY);
+        }
+        if(inLength!=16)
+        {
+            throw new CryptoException(CryptoException.ILLEGAL_USE);
+        }
+        if(mode==Cipher.MODE_ENCRYPT)
+        {
+            cipherKey.getKey(temp,(short)0);
+            RoundKeysSchedule(temp,(short)0,aesRoundKeys);
+            Util.arrayCopy(inBuff,inOffset,temp,(short)0,(short)16);
+            AESEncryptBlock(temp,(short)0,aesRoundKeys);
+            Util.arrayCopy(temp,(short)0,outBuff,outOffset,(short)16);
+            //clear ram arrays and roundkeys
+            return (short)16;
+        }
+        else //decrypt
+        {
+            cipherKey.getKey(temp,(short)0);
+            RoundKeysSchedule(temp,(short)0,aesRoundKeys);
+            Util.arrayCopy(inBuff,inOffset,temp,(short)0,(short)16);
+            AESDecryptBlock(temp,(short)0,aesRoundKeys);
+            Util.arrayCopy(temp,(short)0,outBuff,outOffset,(short)16);
+            //clear ram arrays and roundkeys
+            return (short)16;
+        }
+    }
+
+    //always throw crypto exception
+    //not using this function
+    public short update(byte[] bytes, short i, short i1, byte[] bytes1, short i2) throws CryptoException {
+        return 0;
+    }
 }

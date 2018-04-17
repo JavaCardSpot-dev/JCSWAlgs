@@ -3,7 +3,7 @@ package applet;
 import javacard.framework.*;
 import javacard.security.RandomData;
 
-public class MainApplet extends Applet implements MultiSelectable
+public class MainApplet extends Applet
 {
 	private static final short BUFFER_SIZE = 32;
 
@@ -36,12 +36,10 @@ public class MainApplet extends Applet implements MultiSelectable
 		apdu.setOutgoingAndSend((short)0, BUFFER_SIZE);
 	}
 
-	@Override
 	public boolean select(boolean b) {
 		return true;
 	}
 
-	@Override
 	public void deselect(boolean b) {
 
 	}

@@ -381,7 +381,7 @@ public class ZorroCipher extends Cipher implements IConsts
 		{
 			throw new CryptoException(CryptoException.UNINITIALIZED_KEY);
 		}
-		if(initkey.getSize()!=16 && initkey.getType()!=KeyBuilder.TYPE_DES)
+		if(initkey.getSize()!=128 || initkey.getType()!=KeyBuilder.TYPE_DES)
 		{
 			throw new CryptoException(CryptoException.ILLEGAL_VALUE);
 		}
