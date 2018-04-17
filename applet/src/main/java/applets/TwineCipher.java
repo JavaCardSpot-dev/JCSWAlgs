@@ -26,7 +26,9 @@ public class TwineCipher extends Cipher implements IConsts {
 	private  byte[] temp2   =  null;
 	private  byte[] temp3   =  null;
 	private  byte[] rk 	= null;
-	 					//for storing the expanded key
+
+	//for storing the expanded key
+
 	DESKey cipherKey = null;
 	private byte mode;
 
@@ -106,9 +108,10 @@ public class TwineCipher extends Cipher implements IConsts {
 		byte temp_val2=-1,temp_val3=-1,temp_val4=-1;
 		short sh=0;
 		// reset the array
-		Util.arrayFillNonAtomic(temp, (short)0, (short)20, IConsts.UNTOUCHED_VALUE);
+		Util.arrayFillNonAtomic(temp, (short)0, MAX_MEMORY_TEMPORARY, (byte) 0x00);
 		
 		unrowl80ExpandKey(key);
+
 		
 		for ( iterator = 0 ; iterator < 35;iterator ++)
 		{
@@ -159,7 +162,7 @@ public class TwineCipher extends Cipher implements IConsts {
 	}
 
 
-	public byte[] encrypt(byte[] src,byte[] dest,short len_src)
+	private byte[] encrypt(byte[] src,byte[] dest,short len_src)
 	{
 		Util.arrayFillNonAtomic(temp, (short)0, (short)32, IConsts.UNTOUCHED_VALUE); //reset all values 
 		                                           // 16 bytes for first part
@@ -199,7 +202,7 @@ public class TwineCipher extends Cipher implements IConsts {
 		Util.arrayCopy(temp, (short)24, dest, (short)0, (short)8);
 		return temp; // returns bytes from 24 to 32
 	}
-	public byte[] decrypt(byte[] src,byte[] dest,short len_src)
+	private byte[] decrypt(byte[] src,byte[] dest,short len_src)
 	{
 		// for this alg len_src is always 8 
 		Util.arrayFillNonAtomic(temp, (short)0, (short)32, IConsts.UNTOUCHED_VALUE); //reset all values 
@@ -239,25 +242,6 @@ public class TwineCipher extends Cipher implements IConsts {
 		return temp; // returns bytes from 24 to 32 indexes
 	}
 
-    public short process(byte type,byte[] data,short start_offset,short len_data)
-    {
-    	Util.arrayCopy(data, start_offset, data_enc, (short) 0, len_data);
-    	switch(type)
-    	{
-    		case OFFSET_P1_ENC:
-    			encrypt(data_enc, data, len_data);
-    			return (short)8;
-    		case OFFSET_P1_DEC:
-    			decrypt(data_enc, data, len_data);
-    			return (short)8;
-    		case OFFSET_P1_GEN:
-    			expand80Key(data_enc);
-    			return 10;
-    		default:
-    			return (short)-1;
-    	}
-    	
-    }
 
     private void unrowl80ExpandKey(byte[] key)
     {
@@ -311,7 +295,12 @@ public class TwineCipher extends Cipher implements IConsts {
 			Util.arrayCopy(inBuff,inOffset,temp3,(short)0,inLength);
 			encrypt(temp3,temp2,inLength);
 			Util.arrayCopy(temp2, (short)0, outBuff, outOffset, (short)8);
-			//clear temp3,temp2,rk
+			//cleaning of sensitive memory
+			Util.arrayFillNonAtomic(temp, (short)0, MAX_MEMORY_TEMPORARY, (byte) 0x00);
+			Util.arrayFillNonAtomic(temp2, (short)0, MAX_MEMORY_TEMPORARY, (byte) 0x00);
+			Util.arrayFillNonAtomic(temp3, (short)0, MAX_MEMORY_TEMPORARY, (byte) 0x00);
+			Util.arrayFillNonAtomic(rk, (short)0, (short)(36*8) , (byte) 0x00);
+
 			return (short)8;
 		}
 		else //decrypt
@@ -321,8 +310,13 @@ public class TwineCipher extends Cipher implements IConsts {
 			Util.arrayCopy(inBuff,inOffset,temp3,(short)0,inLength);
 			decrypt(temp3,temp2,inLength);
 			Util.arrayCopy(temp2, (short)0, outBuff, outOffset, (short)8);
-            //clear temp3,temp2,rk
-            return (short)8;
+			//cleaning of sensitive memory
+			Util.arrayFillNonAtomic(temp, (short)0, MAX_MEMORY_TEMPORARY, (byte) 0x00);
+			Util.arrayFillNonAtomic(temp2, (short)0, MAX_MEMORY_TEMPORARY, (byte) 0x00);
+			Util.arrayFillNonAtomic(temp3, (short)0, MAX_MEMORY_TEMPORARY, (byte) 0x00);
+			Util.arrayFillNonAtomic(rk, (short)0, (short)(36*8) , (byte) 0x00);
+
+			return (short)8;
 		}
 	}
 	public byte getAlgorithm()
