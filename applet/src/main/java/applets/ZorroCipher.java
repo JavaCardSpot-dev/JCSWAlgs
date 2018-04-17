@@ -48,8 +48,8 @@ public class ZorroCipher extends Cipher implements IConsts
 			0x0E, (byte) 0xA2, 0x17, 0x56, (byte) 0xFA, 0x01, (byte) 0x99, (byte) 0xEF, 0x16, 0x75, (byte) 0xB2, (byte) 0xC4, (byte) 0xDE, (byte) 0x84, (byte) 0xD4, 0x5D,
 			0x3A, 0x1F, 0x44, 0x41, (byte) 0xB4, 0x6D, (byte) 0xD6, (byte) 0x9C, 0x55, 0x4E, 0x0A, 0x1B, (byte) 0x9A, 0x03, 0x6B, (byte) 0xB7
 		};
-	public static final byte ALG_ZORRO = 18;
-	public static final byte LENGTH_ZORRO= 16;
+	public static final byte ALG_ZORRO = 18; // ID of ZORRO cipher
+	public static final byte LENGTH_ZORRO=  (byte)128; // Block length size
 	public static final short MAX_MEMORY_TEMPORARY=40;
 	private DESKey cipherKey;
 	/** Current mode. Possible values:
@@ -58,11 +58,11 @@ public class ZorroCipher extends Cipher implements IConsts
 	private static ZorroCipher m_instance = null;
 	private boolean externalAccess;
 	private boolean isInitialized = false;
-	 // use 24 - 32 as temp copy
+	// use 24 - 32 as temp copy
 	private byte[] temp   =  JCSystem.makeTransientByteArray(MAX_MEMORY_TEMPORARY,JCSystem.CLEAR_ON_DESELECT);
 	protected ZorroCipher()
 	{
-		//cipherKey= (DESKey)KeyBuilder.buildKey(KeyBuilder.TYPE_DES,(short)LENGTH_ZORRO,true);
+
 	}
 	byte mulGaloisField2_8(byte a,byte b)
 	{
@@ -77,7 +77,7 @@ public class ZorroCipher extends Cipher implements IConsts
 			bit_set = (byte) (a & 0x80);
 			a <<= 1;
 			if (bit_set == (byte)(0x80))
-				a ^= 0x1b;
+				a ^= 0x1b; // This is defining polynomial
 			b >>= 1;
 		}
 		return p;
@@ -319,28 +319,7 @@ public class ZorroCipher extends Cipher implements IConsts
 			m_instance = new ZorroCipher();
 		return m_instance;
 	}
-	public short process(byte type,byte[] data,short start_offset,short len_data)
-	 {
-		 Util.arrayCopy(data, start_offset, temp, (short) 0, (short) 16);
-		 Util.arrayCopy(data, (short) (start_offset+16), temp, (short) 16, (short) 16);
-		 
-		 switch(type)
-	    	{
-	    		case OFFSET_P1_ENC:
-	    			zorroCompleteEnc(temp,(short)0,temp,(short) 16);
-	    			Util.arrayCopy(temp, (short)0, data, (short)(ISO7816.OFFSET_CDATA), (short)16);
-	    			return (short)16;
-	    		case OFFSET_P1_DEC:
-	    			zorroCompleteDec(temp,(short)0,temp,(short) 16);
-	    			Util.arrayCopy(temp, (short)0, data, (short)(ISO7816.OFFSET_CDATA), (short)16);
-	    			return (short)16;
-	    		default:
-	    			return (short)-1;
-	    	}
-	 }
 
-	 //inlength only 16 allowed.
-	//should handle larger lengths and modes from the applet
 	//see example CipherApplet.java
 	public short doFinal(byte[] inBuff, short inOffset, short inLength,
 						 byte[] outBuff, short outOffset) throws CryptoException {
