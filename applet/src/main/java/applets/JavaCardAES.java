@@ -76,7 +76,7 @@ public class JavaCardAES extends Cipher {
   final static short SW_IV_BAD                        = (short) 0x6709;   // BAD INICIALIZATION VECTOR
   final static short SW_CIPHER_DATA_LENGTH_BAD        = (short) 0x6710;   // BAD LENGTH OF DATA USED DURING CIPHER OPERATION
 
-    // NOTE: BLOCKN & KEYN CONSTANTS ARE DEFINED
+    // NOTE: BLOCKN is for block length  & KEYN is for key length CONSTANTS ARE DEFINED
     // ONLY FOR BETTER READIBILITY OF CODE AND CANNOT BE CHANGED!!!
     final public static byte BLOCKLEN                  = (byte) (128 / 8);
     final static byte BLOCKN    		= (byte) (128 / 32);
@@ -90,7 +90,7 @@ public class JavaCardAES extends Cipher {
     // THEREFORE 7 ROUNDS CANNOT BE ATTACKED RIGHT NOW (2006) ANF IF YOU *KNOW WHAT YOUR ARE DOING*,
     // THEN REDUCE ROUNDS AND GET 30% SPEED-UP
     // NOTE THAT ALGORITHM WILL NOT BE BINARY COMPATIBLE WITH AES TEST VECTORS ANYMORE
-    public static byte N_ROUNDS    		= (byte) 10;
+    public static byte N_ROUNDS    		= (byte) 10; // number of round is 10 as per AES standard
 
     //final static byte rcon[] = {(byte) 0x01, (byte) 0x02, (byte) 0x04, (byte) 0x08, (byte) 0x10, (byte) 0x20, (byte) 0x40, (byte) 0x80, (byte) 0x1b, (byte) 0x36};
 
@@ -104,29 +104,23 @@ public class JavaCardAES extends Cipher {
     private byte SBox[] = null;
     private byte SiBox[] = null;
     private byte Alogtable[] = null;
-// ALOG_MUL    private byte Alogtable_mul2[] = null;
-// ALOG_MUL    private byte Alogtable_mul3[] = null;
-    private short Logtable[] = null;
 
-    // SCHEDULED ROUND KEYS
-    //private byte roundKeys[] = null;
+    private short Logtable[] = null;
 
     // PREALOCATED REUSED TRANSIENT BUFFER
     private byte tempBuffer[] = null;
 
     // INICIALIZATION VECTOR
-    public byte       m_IV[] = null;
-    public short      m_IVOffset = 0;
+    private byte       m_IV[] = null;
+    private short      m_IVOffset = 0;
 
     protected JavaCardAES() {
       // ALLOCATE AND COMPUTE LOOKUP TABLES
       SBox = new byte[256];
       SiBox = new byte[256];
       Alogtable = new byte[256];
-// ALOG_MUL     Alogtable_mul2 = new byte[256];
-// ALOG_MUL     Alogtable_mul3 = new byte[256];
-// ALOG_MUL     Alogtable_mul2 = JCSystem.makeTransientByteArray((short)256, JCSystem.CLEAR_ON_RESET);
-// ALOG_MUL     Alogtable_mul3 = JCSystem.makeTransientByteArray((short)256, JCSystem.CLEAR_ON_RESET);
+
+
       Logtable = new short[256];
       tempBuffer = JCSystem.makeTransientByteArray(STATELEN, JCSystem.CLEAR_ON_RESET);
       temp= JCSystem.makeTransientByteArray((short)16, JCSystem.CLEAR_ON_RESET);
@@ -169,13 +163,7 @@ public class JavaCardAES extends Cipher {
         if (Logtable[i] < 0) Logtable[i] = (short) (256 + Logtable[i]);
       }
 
-/*// ALOG_MUL
-      // PRE-COMPUTE Alogtable_mul2 and Alogtable_mul3
-      Alogtable_mul2[0] = 0;
-      for (i=1; i < 256; i++) Alogtable_mul2[i] = (byte) Alogtable[(short) ((short) (Logtable[2] + Logtable[i]) % 255)];
-      Alogtable_mul3[0] = 0;
-      for (i=1; i < 256; i++) Alogtable_mul3[i] = (byte) Alogtable[(short) ((short) (Logtable[3] + Logtable[i]) % 255)];
-/**/
+
     }
 
     /**
@@ -191,7 +179,8 @@ public class JavaCardAES extends Cipher {
       byte     rconpointer = 0;
       short    sourceOffset = 0;
       short    targetOffset = 0;
-      // hlp CONTAINS PRECALCULATED EXPRESSION (round * (4 * KEYN))
+
+
       short    hlp = 0;
 
       // FIRST KEY (SAME AS INPUT KEY)
@@ -224,39 +213,7 @@ public class JavaCardAES extends Cipher {
           }
       }
     }
-/*
-    //
-    // NOT USED IN THIS IMPLEMENTATION EXCEPT UNOPTIMIZED VERSION
-    //
-    private static short TAUB(byte a) {
-      // RETURN SHORT VALUE CONSTRUCTED FROM SIGNED REPRESENTATION OF UNSIGNED VALUE
-      // EXAMPLE: byte val = (byte) 250; // val == -6
-      //          ASSERT(TAUB(val) == 250);
-      return ((a >= 0) ? a : (short) (256 + a));
-    }
 
-    // MULTIPLY TWO ELEMENTS OF GF(2^m)
-    private byte mul(short a, short b) {
-      if ((a != 0) && (b != 0)) {
-        return (byte) Alogtable[(short) ((short) (Logtable[a] + Logtable[b]) % 255)];
-      }
-      else return (byte) 0;
-    }
-
-    // ADD ROUND KEY USING XOR
-    private static void KeyAddition(byte a[], short dataOffset, byte rk[], short keyOffset) {
-      byte i;
-      for (i = 0; i < STATELEN; i++) a[(short) (i + dataOffset)] ^= rk[(short) (i + keyOffset)];
-    }
-
-    // SBox OR SiBox SUBSTITUTION
-    private static void Substitution(byte a[], short dataOffset, byte box[]) {
-      byte i;
-      for (i = 0; i < STATELEN; i++) a[(short) (i + dataOffset)] = box[((a[(short) (i + dataOffset)] >= 0) ? a[(short) (i + dataOffset)] : (short) (256 + a[(short) (i + dataOffset)]))] ;
-    }
-
-
-/**/
 
     // SHIFTING ROWS
     private void ShiftRow(byte a[], short dataOffset, byte d) {
@@ -290,99 +247,50 @@ public class JavaCardAES extends Cipher {
         // TIME REDUCING PRECALCULATION
         hlp += 4; hlp2 += 4;
 
-/*        // UNROLL THIS LOOP:
-//        for(i = 0; i < 4; i++) {
-   // NOT OPTIMISED
-          tempBuffer[(byte) (i + hlp2)] = (byte) mul((short) 2, TAUB(a[(short) (i + hlp)]));
-          tempBuffer[(byte) (i + hlp2)] ^= (byte) mul((short) 3, TAUB(a[(short) (((i + 1) % 4) + hlp)]));
-          tempBuffer[(byte) (i + hlp2)] ^= (byte) a[(short) (((i + 2) % 4) + hlp)];
-          tempBuffer[(byte) (i + hlp2)] ^= (byte) a[(short) (((i + 3) % 4) + hlp)];
-     // END NOT OPTIMISED
-        }
-/**/
-
-     // *** OPT2: OPTIMIZED VERSION WITH UNROLLED LOOPS AND EXPANDED mul() FUNCTION
-        // UNROLLED LOOP: for (i = 0; i < 4; i++)
+       // UNROLLED LOOP: for (i = 0; i < 4; i++)
         // ax WILL CONTAIN VALUE OF 'a[(short) (((i + x) % 4) + hlp)];' TRANSFORMED FROM byte TO short (via TAUB-like function)
           a0 = a[hlp]; a0 = (a0 >= 0) ? a0 : (short) (256 + a0);
           a1 = a[(short) (1 + hlp)]; a1 = (a1 >= 0) ? a1 : (short) (256 + a1);
           a2 = a[(short) (2 + hlp)]; a2 = (a2 >= 0) ? a2 : (short) (256 + a2);
           a3 = a[(short) (3 + hlp)]; a3 = (a3 >= 0) ? a3 : (short) (256 + a3);
 
-          // i == 0
-          // tempBuffer[hlp2] = (byte) mul((byte) 2, a0);
+
           tempBuffer[hlp2] = (a0 != 0) ? Alogtable[(short) ((short) (Logtable[2] + Logtable[a0]) % 255)] : (byte) 0;
-          // tempBuffer[hlp2] ^= (byte) mul((byte) 3, a1);
+
           if (a1 != 0) tempBuffer[hlp2] ^= Alogtable[(short) ((short) (Logtable[3] + Logtable[a1]) % 255)];
           tempBuffer[hlp2] ^= a2;
           tempBuffer[hlp2] ^= a3;
 
-          // i == 1
+
           hlp3 = (byte) (hlp2 + 1);
-          //tempBuffer[hlp3] = (byte) mul((byte) 2, a1);
+
+
           tempBuffer[hlp3] = (a1 != 0) ? Alogtable[(short) ((short) (Logtable[2] + Logtable[a1]) % 255)] : (byte) 0;
-          //tempBuffer[hlp3] ^= (byte) mul((byte) 3, a2);
+
           if (a2 != 0) tempBuffer[hlp3] ^= Alogtable[(short) ((short) (Logtable[3] + Logtable[a2]) % 255)];
           tempBuffer[hlp3] ^= a3;
           tempBuffer[hlp3] ^= a0;
 
-          // i == 2
+
           hlp3 = (byte) (hlp2 + 2);
-          //tempBuffer[hlp3] = (byte) mul((byte) 2, a2);
+
           tempBuffer[hlp3] = (a2 != 0) ? Alogtable[(short) ((short) (Logtable[2] + Logtable[a2]) % 255)] : (byte) 0;
-          //tempBuffer[hlp3] ^= (byte) mul((byte) 3, a3);
+
           if (a3 != 0) tempBuffer[hlp3] ^= Alogtable[(short) ((short) (Logtable[3] + Logtable[a3]) % 255)];
           tempBuffer[hlp3] ^= a0;
           tempBuffer[hlp3] ^= a1;
 
-          // i == 3
+
           hlp3 = (byte) (hlp2 + 3);
-          //tempBuffer[hlp3] = (byte) mul((byte) 2, a3);
+
           tempBuffer[hlp3] = (a3 != 0) ? Alogtable[(short) ((short) (Logtable[2] + Logtable[a3]) % 255)] : (byte) 0;
-          //tempBuffer[hlp3] ^= (byte) mul((byte) 3, a0);
+
           if (a0 != 0) tempBuffer[hlp3] ^= Alogtable[(short) ((short) (Logtable[3] + Logtable[a0]) % 255)];
           tempBuffer[hlp3] ^= a1;
           tempBuffer[hlp3] ^= a2;
 
-       //***  OPT2: END OPTIMIZED VERSION WITH UNROLLED LOOPS AND EXPANDED mul() FUNCTION /**/
 
-/* // ALOG_MUL - disable OPT2: block when use OPT3
-// *** OPT3: OPTIMIZED VERSION WITH UNROLLED LOOPS AND PRE-COMPUTED mul(2,x) AND  mul(3,x) FUNCTION
-   // UNROLLED LOOP: for (i = 0; i < 4; i++)
-   // ax WILL CONTAIN VALUE OF 'a[(short) (((i + x) % 4) + hlp)];' TRANSFORMED FROM byte TO short (via TAUB-like function)
-          a0 = a[hlp]; a0 = (a0 >= 0) ? a0 : (short) (256 + a0);
-          a1 = a[(short) (1 + hlp)]; a1 = (a1 >= 0) ? a1 : (short) (256 + a1);
-          a2 = a[(short) (2 + hlp)]; a2 = (a2 >= 0) ? a2 : (short) (256 + a2);
-          a3 = a[(short) (3 + hlp)]; a3 = (a3 >= 0) ? a3 : (short) (256 + a3);
 
-          // i == 0
-          tempBuffer[hlp2] = Alogtable_mul2[a0];
-          tempBuffer[hlp2] ^= Alogtable_mul3[a1];
-          tempBuffer[hlp2] ^= a2;
-          tempBuffer[hlp2] ^= a3;
-
-          // i == 1
-          hlp3 = (byte) (hlp2 + 1);
-          tempBuffer[hlp3] = Alogtable_mul2[a1];
-          tempBuffer[hlp3] ^= Alogtable_mul3[a2];
-          tempBuffer[hlp3] ^= a3;
-          tempBuffer[hlp3] ^= a0;
-
-          // i == 2
-          hlp3 = (byte) (hlp2 + 2);
-          tempBuffer[hlp3] = Alogtable_mul2[a2];
-          tempBuffer[hlp3] ^= Alogtable_mul3[a3];
-          tempBuffer[hlp3] ^= a0;
-          tempBuffer[hlp3] ^= a1;
-
-          // i == 3
-          hlp3 = (byte) (hlp2 + 3);
-          tempBuffer[hlp3] = Alogtable_mul2[a3];
-          tempBuffer[hlp3] ^= Alogtable_mul3[a0];
-          tempBuffer[hlp3] ^= a1;
-          tempBuffer[hlp3] ^= a2;
-
-     //*** OPT3: END OPTIMIZED VERSION WITH UNROLLED LOOPS AND PRE-COMPUTED mul(2,x) AND  mul(3,x) FUNCTION /**/
       }
 
       Util.arrayCopyNonAtomic(tempBuffer, (short) 0, a, dataOffset, STATELEN);
@@ -476,7 +384,7 @@ public class JavaCardAES extends Cipher {
       * @param aesRoundKeys ... scheduled keys for AES (from RoundKeysSchedule() function)
       * @return true if encrypt success, false otherwise.
       */
-     public boolean AESEncryptBlock(byte data[], short dataOffset, byte[] aesRoundKeys) {
+     private boolean AESEncryptBlock(byte data[], short dataOffset, byte[] aesRoundKeys) {
         byte r;
         byte i;
         short keysOffset = 0;
@@ -528,7 +436,7 @@ public class JavaCardAES extends Cipher {
       * @param aesRoundKeys ... scheduled keys for AES (from RoundKeysSchedule() function)
       * @return true if decrypt success, false otherwise.
       */
-     public boolean AESDecryptBlock(byte data[], short dataOffset, byte[] aesRoundKeys) {
+     private boolean AESDecryptBlock(byte data[], short dataOffset, byte[] aesRoundKeys) {
         byte  r;
         short i;
         short keysOffset = 0;
@@ -627,7 +535,9 @@ public class JavaCardAES extends Cipher {
             Util.arrayCopy(inBuff,inOffset,temp,(short)0,(short)16);
             AESEncryptBlock(temp,(short)0,aesRoundKeys);
             Util.arrayCopy(temp,(short)0,outBuff,outOffset,(short)16);
-            //clear ram arrays and roundkeys
+            //cleaning of RAM memory
+            Util.arrayFillNonAtomic(temp, (byte)0, (byte) 16, (byte) 0x00); //reset to zero
+            Util.arrayFillNonAtomic(aesRoundKeys, (byte)0, (byte) 300, (byte) 0x00); //reset to zero
             return (short)16;
         }
         else //decrypt
@@ -637,7 +547,9 @@ public class JavaCardAES extends Cipher {
             Util.arrayCopy(inBuff,inOffset,temp,(short)0,(short)16);
             AESDecryptBlock(temp,(short)0,aesRoundKeys);
             Util.arrayCopy(temp,(short)0,outBuff,outOffset,(short)16);
-            //clear ram arrays and roundkeys
+            //cleaning of RAM memory
+            Util.arrayFillNonAtomic(temp, (byte)0, (byte) 16, (byte) 0x00); //reset to zero
+            Util.arrayFillNonAtomic(aesRoundKeys, (byte)0, (byte) 300, (byte) 0x00); //reset to zero
             return (short)16;
         }
     }
