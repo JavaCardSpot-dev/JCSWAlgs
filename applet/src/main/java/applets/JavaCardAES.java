@@ -184,7 +184,7 @@ public class JavaCardAES extends Cipher {
      * @param keyOffset ... start offset in key array
      * @param aesRoundKeys ... array to hold scheduled keys
      */
-    public void RoundKeysSchedule(byte key[], short keyOffset, byte aesRoundKeys[]) {
+    private void RoundKeysSchedule(byte key[], short keyOffset, byte aesRoundKeys[]) {
       byte     i;
       byte     j;
       byte     round;

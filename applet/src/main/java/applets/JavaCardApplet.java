@@ -4,7 +4,11 @@ import javacard.framework.*;
 import javacard.security.*;
 import javacardx.crypto.Cipher;
 
-public class JavaCardApplet  extends Applet
+public class JavaCardApplet
+{
+
+}
+/*public class JavaCardApplet  extends Applet
         implements IConsts{
     boolean         m_isRealCard = false;
     final static short ARRAY_LENGTH                   = (short) 300;
@@ -325,4 +329,4 @@ public class JavaCardApplet  extends Applet
 
 
 }
-
+*/
