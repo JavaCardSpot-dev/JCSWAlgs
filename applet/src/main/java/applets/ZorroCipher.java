@@ -340,6 +340,7 @@ public class ZorroCipher extends Cipher implements IConsts
 			zorroCompleteEnc(temp,(short)0,temp,(short) 16);
 			Util.arrayCopy(temp, (short)0, outBuff, outOffset, (short)16);
 			Util.arrayFillNonAtomic(temp, (byte)0, MAX_MEMORY_TEMPORARY, (byte) 0x00); //reset all values
+
 			return (short)16;
 		}
 		else //decrypt
@@ -348,7 +349,9 @@ public class ZorroCipher extends Cipher implements IConsts
 			cipherKey.getKey(temp,inLength);
 			zorroCompleteDec(temp,(short)0,temp,(short) 16);
 			Util.arrayCopy(temp, (short)0, outBuff, outOffset, (short)16);
+
 			Util.arrayFillNonAtomic(temp, (byte)0, MAX_MEMORY_TEMPORARY, (byte) 0x00); //reset all values
+
 			return (short)16;
 		}
 	}
