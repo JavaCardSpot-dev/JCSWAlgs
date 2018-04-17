@@ -4,9 +4,6 @@ import javacard.framework.*;
 import javacard.security.*;
 import javacardx.crypto.Cipher;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-
 public class JavaCardApplet  extends Applet
         implements IConsts{
     boolean         m_isRealCard = false;
@@ -50,7 +47,7 @@ public class JavaCardApplet  extends Applet
             m_ramArray = JCSystem.makeTransientByteArray(ARRAY_LENGTH, JCSystem.CLEAR_ON_RESET);
             m_ramArray2 = JCSystem.makeTransientByteArray(ARRAY_LENGTH, JCSystem.CLEAR_ON_RESET);
 
-            m_hash = MessageDigest.getInstance(MessageDigest.ALG_SHA_256, false);
+            m_hash = MessageDigest.getInstance(MessageDigest.ALG_SHA, false);
             m_secureRandom = RandomData.getInstance(RandomData.ALG_SECURE_RANDOM);
             m_rsaEngine = Cipher.getInstance(Cipher.ALG_RSA_PKCS1, false);
 
@@ -196,7 +193,7 @@ public class JavaCardApplet  extends Applet
                     case AES_CIPHER:
                         m_aesCipher.RoundKeysSchedule(m_aes_key,(short)0,m_ramArray);
                         m_aesCipher.AESDecryptBlock(buf,(short)(ISO7816.OFFSET_CDATA),m_ramArray);
-                        Util.arrayFillNonAtomic(m_dataArray, (short) 0, ARRAY_LENGTH, (byte) 0);
+                        Util.arrayFillNonAtomic(m_ramArray, (short) 0, ARRAY_LENGTH, (byte) 0);
                         apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, (short)16);
                         return;
                     default:
@@ -317,8 +314,8 @@ public class JavaCardApplet  extends Applet
                 Util.arrayFillNonAtomic(m_ramArray, (short) 0, ARRAY_LENGTH, (byte) 0);
                 Util.arrayCopyNonAtomic(buf,(ISO7816.OFFSET_CDATA),m_ramArray,(short)0,count_data);
                 Sha512.reset();
-                Sha512.doFinal(m_ramArray, (short)0, count_data,buf,ISO7816.OFFSET_CDATA);
-                apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, (short)MessageDigest.LENGTH_SHA_512);
+                len_data  = Sha512.doFinal(m_ramArray, (short)0, count_data,buf,ISO7816.OFFSET_CDATA);
+                apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, (short)len_data);
                 return;
             }
             default:

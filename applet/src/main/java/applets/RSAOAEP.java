@@ -66,7 +66,7 @@ public class RSAOAEP extends Cipher {
     private byte mode;
 
     public byte getAlgorithm() {
-        return Cipher.ALG_RSA_PKCS1_OAEP;
+        return Cipher.ALG_RSA_ISO14888;
     }
 
     public void init(Key rsaKey, byte mode, byte[] algSpecificData, short offset, short len) {

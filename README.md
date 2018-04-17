@@ -7,7 +7,7 @@ meaningful improvements will be attempted to be pushed to upstream repository in
 JCSWAlgs
 ========
 
-The Suite of software reimplementations of selected cryptographic algorithms potentially missing on your smartcard with JavaCard platform. Optimized for speed and small memory footprint.
+The Suite of software reimplementations of selected cryptographic algorithms (primitives) potentially missing on your smartcard with JavaCard platform. Optimized for speed and small memory footprint.
 
 Following algorithms are included at the moment:
 
@@ -25,7 +25,7 @@ From https://github.com/albertocarp/Primitives_SmartCard
 All algorithms are allows to reuse already allocated cryptographic primitives and RAM memory arrays to decrease memory footprint. Allocation of the algorithm is therefore performed differently from native primitives (e.g., SWAES.getInstance() instead of Cipher.getInstance() is required).
 
 
-Usage-
+Usage of Block ciphers-
 -----
 
 Twine_80
@@ -131,7 +131,7 @@ unwrapLen = m_rsaOAEP.doFinal(inArray, baseOffset, wrapLen, outArray, baseOffset
 Based on gardle template available at https://github.com/crocs-muni/javacard-gradle-template-edu
 
 
-[JCSWAlgs,Copyright (C) 2018,  Rao Arvind Mallari, Singh Ram, Singh Bhupinder & Svenda Petr.]
+[JCSWAlgs,Copyright (C) 2018,  Rao Arvind Mallari, Singh Ram, Singh Bhupendra & Svenda Petr.]
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
 under conditions covered by GPLv3.
