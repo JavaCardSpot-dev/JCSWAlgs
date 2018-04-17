@@ -29,7 +29,9 @@ public class TwineCipher extends Cipher implements IConsts {
 	 					//for storing the expanded key
 	DESKey cipherKey = null;
 	private byte mode;
-	private static ZorroCipher m_instance = null;
+
+
+
 	private boolean externalAccess;
 	private boolean isInitialized = false;
 	public static final byte ALG_TWINE = 19;
@@ -42,7 +44,7 @@ public class TwineCipher extends Cipher implements IConsts {
 	private final  short [] shuf = { 5, 0, 1, 4, 7, 12, 3, 8, 13, 6, 9, 2, 15, 10, 11, 14};
 	private final  byte	 [] sbox = {0x0C, 0x00, 0x0F, 0x0A, 0x02, 0x0B, 0x09, 0x05, 0x08, 0x03, 0x0D, 0x07, 0x01, 0x0E, 0x06, 0x04};
 	private final  byte	 [] data_enc  = new byte[16];
-	
+	// Key size of twine cipher is 80 bits i.e. 10 byte
 	public static TwineCipher getInstance(byte type,byte[] key)
 	{
 		switch(type)
@@ -98,7 +100,7 @@ public class TwineCipher extends Cipher implements IConsts {
 	private void expand80Key(byte[] key)
 	{
 		short len_x = 20;
-		short key_size = 10;
+		short key_size = 10; // bytes
 		short iterator = 0,iterator2=0;;
 		byte temp_val=-1;
 		byte temp_val2=-1,temp_val3=-1,temp_val4=-1;
@@ -155,10 +157,7 @@ public class TwineCipher extends Cipher implements IConsts {
 		rk[(short)(35 * 8 + 7)] = temp[16];	
 		
 	}
-	private void expand128Key(byte[] key)
-	{
-		
-	}
+
 
 	public byte[] encrypt(byte[] src,byte[] dest,short len_src)
 	{
