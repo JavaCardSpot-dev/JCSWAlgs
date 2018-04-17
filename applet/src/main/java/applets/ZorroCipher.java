@@ -359,6 +359,7 @@ public class ZorroCipher extends Cipher implements IConsts
 			cipherKey.getKey(temp,inLength);
 			zorroCompleteEnc(temp,(short)0,temp,(short) 16);
 			Util.arrayCopy(temp, (short)0, outBuff, outOffset, (short)16);
+			//clean temp
 			return (short)16;
 		}
 		else //decrypt
@@ -367,6 +368,7 @@ public class ZorroCipher extends Cipher implements IConsts
 			cipherKey.getKey(temp,inLength);
 			zorroCompleteDec(temp,(short)0,temp,(short) 16);
 			Util.arrayCopy(temp, (short)0, outBuff, outOffset, (short)16);
+			//clean temp
 			return (short)16;
 		}
 	}

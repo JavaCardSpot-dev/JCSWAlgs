@@ -311,6 +311,7 @@ public class TwineCipher extends Cipher implements IConsts {
 			Util.arrayCopy(inBuff,inOffset,temp3,(short)0,inLength);
 			encrypt(temp3,temp2,inLength);
 			Util.arrayCopy(temp2, (short)0, outBuff, outOffset, (short)8);
+			//clear temp3,temp2,rk
 			return (short)8;
 		}
 		else //decrypt
@@ -320,7 +321,8 @@ public class TwineCipher extends Cipher implements IConsts {
 			Util.arrayCopy(inBuff,inOffset,temp3,(short)0,inLength);
 			decrypt(temp3,temp2,inLength);
 			Util.arrayCopy(temp2, (short)0, outBuff, outOffset, (short)8);
-			return (short)8;
+            //clear temp3,temp2,rk
+            return (short)8;
 		}
 	}
 	public byte getAlgorithm()

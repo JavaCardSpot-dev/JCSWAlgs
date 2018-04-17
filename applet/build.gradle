@@ -59,32 +59,26 @@ javacard {
     //noinspection GroovyAssignabilityCheck
     config {
         jckit JC_SELECTED
-
         // JCardSim automatically added by the javacard-gradle plugin
         addSurrogateJcardSimRepo true
         addImplicitJcardSim true
         addImplicitJcardSimJunit true
-
-        //noinspection GroovyAssignabilityCheck
-        cap {
+		cap {
 			//4C6162616B417070
             packageName 'applets'
             version '0.1'
             aid '4c:61:62:61:6B:41:70:70'
-            output 'CipherApplet.cap'
+            output 'RSAOAEPApplet.cap'
 
             //noinspection GroovyAssignabilityCheck
 			//4C6162616B4170706C6574
             applet {
-                className 'applets.CipherApplet'
-                aid '4c:61:62:61:6B:41:70:70:6C:65:75'
+                className 'applets.RSAOAEPApplet'
+                aid '4c:61:62:61:6B:41:70:70:6C:65:77'
             }
-
-            //noinspection GroovyAssignabilityCheck
-            dependencies {
+			dependencies {
                 remote 'fr.bmartel:gplatform:2.1.1'
             }
         }
     }
 }
-
