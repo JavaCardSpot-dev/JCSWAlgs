@@ -321,6 +321,7 @@ public class ZorroCipher extends Cipher implements IConsts
 	}
 
 	//see example CipherApplet.java
+	// Util.arrayFillNonAtomic(temp, (short)0, (short)32, IConsts.UNTOUCHED_VALUE); //reset all values
 	public short doFinal(byte[] inBuff, short inOffset, short inLength,
 						 byte[] outBuff, short outOffset) throws CryptoException {
 		//not initialized
@@ -338,7 +339,8 @@ public class ZorroCipher extends Cipher implements IConsts
 			cipherKey.getKey(temp,inLength);
 			zorroCompleteEnc(temp,(short)0,temp,(short) 16);
 			Util.arrayCopy(temp, (short)0, outBuff, outOffset, (short)16);
-			//clean temp
+			Util.arrayFillNonAtomic(temp, (byte)0, MAX_MEMORY_TEMPORARY, (byte) 0x00); //reset all values
+
 			return (short)16;
 		}
 		else //decrypt
@@ -347,7 +349,9 @@ public class ZorroCipher extends Cipher implements IConsts
 			cipherKey.getKey(temp,inLength);
 			zorroCompleteDec(temp,(short)0,temp,(short) 16);
 			Util.arrayCopy(temp, (short)0, outBuff, outOffset, (short)16);
-			//clean temp
+
+			Util.arrayFillNonAtomic(temp, (byte)0, MAX_MEMORY_TEMPORARY, (byte) 0x00); //reset all values
+
 			return (short)16;
 		}
 	}
@@ -375,14 +379,6 @@ public class ZorroCipher extends Cipher implements IConsts
 	//always throw exception
 	public void init(Key key, byte mode, byte[] buf, short bOff, short bLen) throws CryptoException
 	{
-		/*this.mode = mode;
-		if(bLen!=16)
-		{
-			throw new CryptoException(CryptoException.INVALID_INIT);
-		}
-		cipherKey.setKey(buf,bOff);
-		cipherKey=(DESKey)key;
-		isInitialized = true;*/
 		throw new CryptoException(CryptoException.INVALID_INIT);
 	}
 
