@@ -111,5 +111,20 @@ javacard {
                 aid '4c:61:62:61:6B:41:70:70:6C:65:77'
             }
 		}
+		cap {
+			//4C6162616B417070
+            packageName 'applets'
+            version '0.1'
+            aid '4c:61:62:61:6B:41:70:70'
+            output 'Sha3Applet.cap'
+
+            //noinspection GroovyAssignabilityCheck
+			//4C6162616B4170706C6574
+            applet {
+                className 'applets.Sha3Applet'
+                aid '4c:61:62:61:6B:41:70:70:6C:65:78'
+            }
+		}
+		
     }
 }
