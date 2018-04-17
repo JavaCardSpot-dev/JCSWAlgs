@@ -29,8 +29,8 @@ import java.util.ArrayList;
  */
 public class Sha3APDU {
 
-    private final static byte SELECT_TESTAPPLET[] = Util.hexStringToByteArray("5365637572654a617662");
-    private static byte APPLET_AID[] = Util.hexStringToByteArray("4C6162616B4170706C6575");
+    //private final static byte SELECT_TESTAPPLET[] = Util.hexStringToByteArray("5365637572654a617662");
+    private static byte APPLET_AID[] = Util.hexStringToByteArray("4C6162616B4170706C6578");
     static short getShort(byte[] array, int offset) {
         return (short) (((array[offset] & 0xFF) << 8) | (array[offset + 1] & 0xFF));
     }
