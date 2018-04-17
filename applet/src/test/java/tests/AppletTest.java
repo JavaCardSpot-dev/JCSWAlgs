@@ -35,9 +35,19 @@ public class AppletTest {
     // Example test
     @Test
     public void hello() throws Exception {
-        final ResponseAPDU responseAPDU = SimpleAPDU.demoSingleCommand();
+        ResponseAPDU responseAPDU = SimpleAPDU.demoSingleCommand();
         Assert.assertNotNull(responseAPDU);
-       Assert.assertEquals(0x9000, responseAPDU.getSW());
+        Assert.assertEquals(0x9000, responseAPDU.getSW());
+        Assert.assertNotNull(responseAPDU.getBytes());
+
+        responseAPDU = AESAPDU.demoSingleCommand();
+        Assert.assertNotNull(responseAPDU);
+        Assert.assertEquals(0x9000, responseAPDU.getSW());
+        Assert.assertNotNull(responseAPDU.getBytes());
+
+        responseAPDU = RSAOEAPAPDU.demoSingleCommand();
+        Assert.assertNotNull(responseAPDU);
+        Assert.assertEquals(0x9000, responseAPDU.getSW());
         Assert.assertNotNull(responseAPDU.getBytes());
     }
 }
