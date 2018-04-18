@@ -54,7 +54,7 @@ public class Sha3APDU {
         final RunConfig runCfg = RunConfig.getDefaultConfig();
         byte[] install_data=Util.hexStringToByteArray("00000000112233445566778899000000112233445566778899");
         // A) If running on physical card
-        //runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
+//        runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
 
         // B) If running in the simulator
         runCfg.setAppletToSimulate(Sha3Applet.class); // main class of applet to simulate

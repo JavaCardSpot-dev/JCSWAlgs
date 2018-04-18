@@ -139,6 +139,20 @@ javacard {
                 aid '4c:61:62:61:6B:41:70:70:6C:65:79'
             }
 		}
+		cap {
+			//4C6162616B417070
+            packageName 'applets'
+            version '0.1'
+            aid '4c:61:62:61:6B:41:70:70'
+            output 'Sha512Applet.cap'
+
+            //noinspection GroovyAssignabilityCheck
+			//4C6162616B4170706C6574
+            applet {
+                className 'applets.Sha512Applet'
+                aid '4c:61:62:61:6B:41:70:70:6C:65:80'
+            }
+		}
 		
     }
 }
