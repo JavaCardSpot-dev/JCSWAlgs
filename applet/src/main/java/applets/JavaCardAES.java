@@ -92,9 +92,9 @@ public class JavaCardAES extends Cipher {
     // NOTE THAT ALGORITHM WILL NOT BE BINARY COMPATIBLE WITH AES TEST VECTORS ANYMORE
     public static byte N_ROUNDS    		= (byte) 10; // number of round is 10 as per AES standard
 
-    //final static byte rcon[] = {(byte) 0x01, (byte) 0x02, (byte) 0x04, (byte) 0x08, (byte) 0x10, (byte) 0x20, (byte) 0x40, (byte) 0x80, (byte) 0x1b, (byte) 0x36};
+    final static byte rcon[] = {(byte) 0x01, (byte) 0x02, (byte) 0x04, (byte) 0x08, (byte) 0x10, (byte) 0x20, (byte) 0x40, (byte) 0x80, (byte) 0x1b, (byte) 0x36};
 
-     final static byte rcon[] = {(byte) 0xaa, (byte) 0xab, (byte) 0xac, (byte) 0xad, (byte) 0xae, (byte) 0xaf, (byte) 0xba, (byte) 0xbb, (byte) 0xbc, (byte) 0xbd};
+     //final static byte rcon[] = {(byte) 0xaa, (byte) 0xab, (byte) 0xac, (byte) 0xad, (byte) 0xae, (byte) 0xaf, (byte) 0xba, (byte) 0xbb, (byte) 0xbc, (byte) 0xbd};
 
     // shifts[0..3] -> ENCRYPT, shifts[4..7] ... DECRYPT
     final static byte shifts[] = { 0, 1, 2, 3, 0, 3, 2, 1};
@@ -111,8 +111,8 @@ public class JavaCardAES extends Cipher {
     private byte tempBuffer[] = null;
 
     // INICIALIZATION VECTOR
-    private byte       m_IV[] = null;
-    private short      m_IVOffset = 0;
+    //private byte       m_IV[] = null;
+    //private short      m_IVOffset = 0;
 
     protected JavaCardAES() {
       // ALLOCATE AND COMPUTE LOOKUP TABLES
@@ -124,8 +124,8 @@ public class JavaCardAES extends Cipher {
       Logtable = new short[256];
       tempBuffer = JCSystem.makeTransientByteArray(STATELEN, JCSystem.CLEAR_ON_RESET);
       temp= JCSystem.makeTransientByteArray((short)16, JCSystem.CLEAR_ON_RESET);
-      m_IV = new byte[16];
-      m_IVOffset=0;
+      //m_IV = new byte[16];
+      //m_IVOffset=0;
       aesRoundKeys = JCSystem.makeTransientByteArray((short)300, JCSystem.CLEAR_ON_RESET);
       MakeSBox();
     }
@@ -491,7 +491,7 @@ public class JavaCardAES extends Cipher {
         }
         this.mode =mode;
         cipherKey = (DESKey)initkey;
-        Util.arrayFillNonAtomic(m_IV,(short)0,(short)16,(byte)0x00);
+        //Util.arrayFillNonAtomic(m_IV,(short)0,(short)16,(byte)0x00);
         isInitialized=true;
     }
 
@@ -509,7 +509,7 @@ public class JavaCardAES extends Cipher {
         }
         this.mode =mode;
         cipherKey = (DESKey)initkey;
-        Util.arrayCopyNonAtomic(buf,bOff,m_IV,(short)0,bLen);
+        //Util.arrayCopyNonAtomic(buf,bOff,m_IV,(short)0,bLen);
         isInitialized=true;
     }
 
