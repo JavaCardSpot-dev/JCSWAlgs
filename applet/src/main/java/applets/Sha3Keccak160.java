@@ -453,7 +453,7 @@ public class Sha3Keccak160 extends Sha3Keccak
 				state.state[state.state_control].lsb ^= 0x01;
 			}
 			state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].msb ^= 0x00;
-			state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x80;
+			state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x81;
 			
 			keccak_function_f(state.state);
 			state.state_control = 0;
@@ -567,7 +567,8 @@ public class Sha3Keccak160 extends Sha3Keccak
 					state.state[x].lsb ^= 0x01;
 					state.state[x].msb ^= 0x00;
 					state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].msb ^= 0x00;
-					state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x80;
+					//state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x80;
+					state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x81;
 				}
 				else{
 					temp.lsb = message[message_base_address];
@@ -584,7 +585,7 @@ public class Sha3Keccak160 extends Sha3Keccak
 					state.state[x].msb ^= temp.msb;
 					state.state[x].lsb ^= temp.lsb;
 					state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].msb ^= 0x00;
-					state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x80;
+					state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x81;
 					message_size_bytes-=2;
 					message_base_address+=2;
 			}
@@ -592,7 +593,7 @@ public class Sha3Keccak160 extends Sha3Keccak
 					state.state[x].msb ^= 0x00;
 					state.state[x].lsb ^= 0x01;
 					state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].msb ^= 0x00;
-					state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x80;
+					state.state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x81;
 					message_size_bytes--;
 					message_base_address++;
 			}
@@ -663,7 +664,7 @@ public class Sha3Keccak160 extends Sha3Keccak
 					state[j].msb = 0x00;
 			    }
 				state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].msb ^= 0x00;
-				state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x80;
+				state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x81;
 				message_base_address = message_size_bytes;
 				message_size_bytes = 0;	
 		}
@@ -683,7 +684,7 @@ public class Sha3Keccak160 extends Sha3Keccak
 					state[x].msb ^= 0x00;
 					state[x].lsb ^= 0x01;
 					state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].msb ^= 0x00;
-					state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x80;
+					state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x81;
 				}
 				else{
 					temp.lsb = message[message_base_address];
@@ -700,7 +701,7 @@ public class Sha3Keccak160 extends Sha3Keccak
 					state[x].msb ^= temp.msb;
 					state[x].lsb ^= temp.lsb;
 					state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].msb ^= 0x00;
-					state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x80;
+					state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x81;
 					message_size_bytes-=2;
 					message_base_address+=2;
 			}
@@ -708,7 +709,7 @@ public class Sha3Keccak160 extends Sha3Keccak
 					state[x].msb ^= 0x00;
 					state[x].lsb ^= 0x01;
 					state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].msb ^= 0x00;
-					state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x80;
+					state[(short)(KECCAK_RATE_SIZE_WORDS - 1)].lsb ^= 0x81;
 					message_size_bytes--;
 					message_base_address++;
 			}
