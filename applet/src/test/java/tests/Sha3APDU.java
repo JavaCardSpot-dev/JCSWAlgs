@@ -75,7 +75,7 @@ public class Sha3APDU {
         byte[] plain;
 
         System.out.println("Hash: ");
-        plain=Util.hexStringToByteArray("00");  //only 50 bytes possible
+        plain=Util.hexStringToByteArray("6161");  //only 50 bytes possible
        //ResponseAPDU response = cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,aes_key_iv));
         //System.out.println(response);
         System.out.println("Keccak_160: ");
@@ -89,13 +89,13 @@ public class Sha3APDU {
         System.out.println("KECCAK_r128c272: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x42,0x00,plain));
         System.out.println("KECCAK_r544c256: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x43,0x00,plain_max));
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x43,0x00,plain));
         System.out.println("KECCAK_r512c288: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x44,0x00,plain));
         System.out.println("KECCAK_r256c544: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x46,0x00,plain));
-       // System.out.println("SHA512: ");
-       // response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x47,0x00,plain));
+        System.out.println("SHA512: ");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x47,0x00,plain));
 
        // System.out.println("Tests: ");
        // plain=Util.hexStringToByteArray("11111122222211");
