@@ -48,7 +48,7 @@ public class Sha3APDU {
     public static ResponseAPDU demoSingleCommand() throws Exception {
 
         // CardManager abstracts from real or simulated card, provide with applet AID
-        final CardManager cardMngr = new CardManager(true, APPLET_AID);
+        final CardManager cardMngr = new CardManager(false, APPLET_AID);
 
         // Get default configuration for subsequent connection to card (personalized later)
         final RunConfig runCfg = RunConfig.getDefaultConfig();
@@ -80,7 +80,7 @@ public class Sha3APDU {
         //System.out.println(response);
         System.out.println("Keccak_160: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x40,0x00,plain));
-        byte[]   plain_max=Util.hexStringToByteArray("60616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566");
+        byte[] plain_max=Util.hexStringToByteArray("60616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566");
         byte[] Test_Vector1=Util.hexStringToByteArray("010000000058590e59bf419e1981b6");
         System.out.println("Keccak_160 (Round:1 Pre image): ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x40,0x00,Test_Vector1));
@@ -94,8 +94,6 @@ public class Sha3APDU {
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x44,0x00,plain));
         System.out.println("KECCAK_r256c544: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x46,0x00,plain));
-        System.out.println("SHA512: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x47,0x00,plain));
 
        // System.out.println("Tests: ");
        // plain=Util.hexStringToByteArray("11111122222211");

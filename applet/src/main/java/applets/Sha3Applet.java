@@ -13,8 +13,7 @@ public class Sha3Applet extends Applet
     final static short ARRAY_LENGTH = (short) 300;
     private Sha3Applet()
     {
-        m_ramArray = JCSystem.makeTransientByteArray(ARRAY_LENGTH, JCSystem.CLEAR_ON_RESET);
-        Sha512.init();
+
     }
 
     public static void install(byte bArray[], short bOffset, byte bLength) throws ISOException {
@@ -103,15 +102,7 @@ private void processHash(APDU apdu)
                 apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, len_data);
                 return;
             }
-            case IConsts.HASH_SHA512:
-            {
-                Util.arrayFillNonAtomic(m_ramArray, (short) 0, ARRAY_LENGTH, (byte) 0);
-                Util.arrayCopyNonAtomic(buf,(ISO7816.OFFSET_CDATA),m_ramArray,(short)0,count_data);
-                Sha512.reset();
-                Sha512.doFinal(m_ramArray, (short)0, count_data,buf,ISO7816.OFFSET_CDATA);
-                apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, (short)64);
-                return;
-            }
+
             default:
                 break;
         }
