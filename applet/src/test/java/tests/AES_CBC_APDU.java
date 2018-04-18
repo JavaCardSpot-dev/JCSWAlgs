@@ -39,13 +39,13 @@ public class AES_CBC_APDU {
         final RunConfig runCfg = RunConfig.getDefaultConfig();
         byte[] install_data=Util.hexStringToByteArray("00000000112233445566778899000000112233445566778899");
         // A) If running on physical card
-        runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
+        //runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
 
         // B) If running in the simulator
-        /*runCfg.setAppletToSimulate(AES_CBC_Applet.class); // main class of applet to simulate
+        runCfg.setAppletToSimulate(AES_CBC_Applet.class); // main class of applet to simulate
        runCfg.setTestCardType(RunConfig.CARD_TYPE.JCARDSIMLOCAL); // Use local simulator
         runCfg.setbReuploadApplet(true);
-        runCfg.setInstallData(install_data);*/
+        runCfg.setInstallData(install_data);
         System.out.print("Connecting to card...");
         if (!cardMngr.Connect(runCfg)) {
             System.out.println(" Failed.");
