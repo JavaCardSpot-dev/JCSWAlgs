@@ -54,14 +54,14 @@ public class Sha3APDU {
         final RunConfig runCfg = RunConfig.getDefaultConfig();
         byte[] install_data=Util.hexStringToByteArray("00000000112233445566778899000000112233445566778899");
         // A) If running on physical card
-        runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
+        //runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
 
         // B) If running in the simulator
-        /*runCfg.setAppletToSimulate(Sha3Applet.class); // main class of applet to simulate
+        runCfg.setAppletToSimulate(Sha3Applet.class); // main class of applet to simulate
         runCfg.setTestCardType(RunConfig.CARD_TYPE.JCARDSIMLOCAL); // Use local simulator
         runCfg.setbReuploadApplet(true);
         runCfg.setInstallData(install_data);
-*/
+
         System.out.print("Connecting to card...");
         if (!cardMngr.Connect(runCfg)) {
             System.out.println(" Failed.");
@@ -80,7 +80,7 @@ public class Sha3APDU {
         //System.out.println(response);
         System.out.println("Keccak_160: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x40,0x00,plain));
-        byte[] plain_max=Util.hexStringToByteArray("60616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566");
+        byte[]   plain_max=Util.hexStringToByteArray("60616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566");
         byte[] Test_Vector1=Util.hexStringToByteArray("010000000058590e59bf419e1981b6");
         System.out.println("Keccak_160 (Round:1 Pre image): ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x40,0x00,Test_Vector1));
