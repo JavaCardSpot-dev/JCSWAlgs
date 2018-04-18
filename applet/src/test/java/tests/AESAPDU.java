@@ -47,7 +47,6 @@ public class AESAPDU {
        runCfg.setTestCardType(RunConfig.CARD_TYPE.JCARDSIMLOCAL); // Use local simulator
         runCfg.setbReuploadApplet(true);
         runCfg.setInstallData(install_data);
-
         System.out.print("Connecting to card...");
         if (!cardMngr.Connect(runCfg)) {
             System.out.println(" Failed.");
