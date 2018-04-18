@@ -1,22 +1,10 @@
 package tests;
 
 import applets.Sha3Applet;
+import applets.Sha512Applet;
 import cardTools.CardManager;
 import cardTools.RunConfig;
 import cardTools.Util;
-
-import javax.smartcardio.CardException;
-import javax.smartcardio.CommandAPDU;
-import javax.smartcardio.ResponseAPDU;
-import java.util.ArrayList;
-
-
-
-import applets.Sha3Applet;
-import cardTools.CardManager;
-import cardTools.RunConfig;
-import cardTools.Util;
-import com.google.common.primitives.Bytes;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CommandAPDU;
@@ -27,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author Petr Svenda petr@svenda.com
  */
-public class Sha3APDU {
+public class Sha512APDU {
 
     //private final static byte SELECT_TESTAPPLET[] = Util.hexStringToByteArray("5365637572654a617662");
     private static byte APPLET_AID[] = Util.hexStringToByteArray("4C6162616B4170706C6578");
@@ -54,10 +42,10 @@ public class Sha3APDU {
         final RunConfig runCfg = RunConfig.getDefaultConfig();
         byte[] install_data=Util.hexStringToByteArray("00000000112233445566778899000000112233445566778899");
         // A) If running on physical card
-//        runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
+        //runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
 
         // B) If running in the simulator
-        runCfg.setAppletToSimulate(Sha3Applet.class); // main class of applet to simulate
+        runCfg.setAppletToSimulate(Sha512Applet.class); // main class of applet to simulate
         runCfg.setTestCardType(RunConfig.CARD_TYPE.JCARDSIMLOCAL); // Use local simulator
         runCfg.setbReuploadApplet(true);
         runCfg.setInstallData(install_data);
@@ -78,7 +66,7 @@ public class Sha3APDU {
         plain=Util.hexStringToByteArray("6161");  //only 50 bytes possible
        //ResponseAPDU response = cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,aes_key_iv));
         //System.out.println(response);
-        System.out.println("Keccak_160: ");
+       /* System.out.println("Keccak_160: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x40,0x00,plain));
         byte[] plain_max=Util.hexStringToByteArray("60616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566");
         byte[] Test_Vector1=Util.hexStringToByteArray("010000000058590e59bf419e1981b6");
@@ -94,6 +82,9 @@ public class Sha3APDU {
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x44,0x00,plain));
         System.out.println("KECCAK_r256c544: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x46,0x00,plain));
+        */
+        System.out.println("SHA512: ");
+        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x47,0x00,plain));
 
        // System.out.println("Tests: ");
        // plain=Util.hexStringToByteArray("11111122222211");

@@ -1,23 +1,19 @@
 package applets;
 
-import javacard.framework.APDU;
-import javacard.framework.Applet;
-import javacard.framework.ISO7816;
-import javacard.framework.ISOException;
-
 import javacard.framework.*;
-import javacard.security.*;
-public class Sha3Applet extends Applet
+
+public class Sha512Applet extends Applet
         implements IConsts {
     private byte m_ramArray[] = null;
     final static short ARRAY_LENGTH = (short) 300;
-    private Sha3Applet()
+    private Sha512Applet()
     {
-
+        m_ramArray = JCSystem.makeTransientByteArray(ARRAY_LENGTH, JCSystem.CLEAR_ON_RESET);
+        Sha512.init();
     }
 
     public static void install(byte bArray[], short bOffset, byte bLength) throws ISOException {
-        new Sha3Applet().register();
+        new Sha512Applet().register();
     }
 
     public void process(APDU apdu) throws ISOException {
@@ -54,7 +50,7 @@ private void processHash(APDU apdu)
         short len_data = -1;
         switch(state)
         {
-            case IConsts.HASH_KECCAK_160:
+            /*case IConsts.HASH_KECCAK_160:
             {
                 Sha3Keccak cipherHash = Sha3Keccak.getInstance(IConsts.HASH_KECCAK_160);
                 cipherHash.postInit();
@@ -101,8 +97,16 @@ private void processHash(APDU apdu)
                 len_data  = cipherHash.process(HASH, buf, (ISO7816.OFFSET_CDATA), count_data);
                 apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, len_data);
                 return;
+            }*/
+            case IConsts.HASH_SHA512:
+            {
+                Util.arrayFillNonAtomic(m_ramArray, (short) 0, ARRAY_LENGTH, (byte) 0);
+                Util.arrayCopyNonAtomic(buf,(ISO7816.OFFSET_CDATA),m_ramArray,(short)0,count_data);
+                Sha512.reset();
+                Sha512.doFinal(m_ramArray, (short)0, count_data,buf,ISO7816.OFFSET_CDATA);
+                apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, (short)64);
+                return;
             }
-
             default:
                 break;
         }
