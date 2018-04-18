@@ -94,8 +94,8 @@ public class AES_CBC_Applet extends Applet implements IConsts{
                 {
                     case AES_CIPHER:
                         len_data= encrypt(buf,(short)(ISO7816.OFFSET_CDATA),count_data,m_ramArray,(short)0);
-                        Util.arrayCopy(m_ramArray,(short)0,buf,ISO7816.OFFSET_CDATA,len_data);
-                        apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, len_data);
+                        Util.arrayCopy(m_ramArray,(short)0,buf,(short)0,len_data);
+                        apdu.setOutgoingAndSend((short)0, len_data);
                         return;
                     default:
                         ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
@@ -106,8 +106,8 @@ public class AES_CBC_Applet extends Applet implements IConsts{
                 {
                     case AES_CIPHER:
                         len_data= decrypt(buf,(short)(ISO7816.OFFSET_CDATA),count_data,m_ramArray,(short)0);
-                        Util.arrayCopy(m_ramArray,(short)0,buf,ISO7816.OFFSET_CDATA,len_data);
-                        apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, len_data);
+                        Util.arrayCopy(m_ramArray,(short)0,buf,(short)0,len_data);
+                        apdu.setOutgoingAndSend((short)0, len_data);
                         return;
                     default:
                         ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
@@ -132,7 +132,7 @@ public class AES_CBC_Applet extends Applet implements IConsts{
     private short encrypt(byte[] inbuf, short inoff,short len, byte[] outbuf,short outoff)
     {
         //short len_data;
-        Util.arrayFillNonAtomic(m_iv,(short)0,(short)16,(byte)0x11);//default IV of zero
+        Util.arrayFillNonAtomic(m_iv,(short)0,(short)16,(byte)0x00);//default IV of zero
         short pad=0;
         if(len%16!=0) {
             Util.arrayFillNonAtomic(inbuf, (short) (inoff + len), (short) (16 - (len % 16)), (byte) 0x00); //zero padding
@@ -158,7 +158,7 @@ public class AES_CBC_Applet extends Applet implements IConsts{
 
     private short decrypt(byte[] inbuf, short inoff,short len, byte[] outbuf,short outoff)
     {
-        Util.arrayFillNonAtomic(m_iv,(short)0,(short)16,(byte)0x11);//default IV of zero
+        Util.arrayFillNonAtomic(m_iv,(short)0,(short)16,(byte)0x00);//default IV of zero
         if(len%16!=0) {
             throw new CryptoException(CryptoException.ILLEGAL_VALUE);
         }

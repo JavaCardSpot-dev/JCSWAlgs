@@ -496,21 +496,11 @@ public class JavaCardAES extends Cipher {
     }
 
 
-    //AES needs IV, init using this for user defined IV, first 16 bytes of buf used as IV
+    //not using this method of init
+    //always throw exception
     public void init(Key initkey, byte mode, byte[] buf, short bOff, short bLen) throws CryptoException {
 
-         if(!initkey.isInitialized())
-        {
-            throw new CryptoException(CryptoException.UNINITIALIZED_KEY);
-        }
-        if(initkey.getSize()!=16 && initkey.getType()!= KeyBuilder.TYPE_DES && bLen !=16)
-        {
-            throw new CryptoException(CryptoException.ILLEGAL_VALUE);
-        }
-        this.mode =mode;
-        cipherKey = (DESKey)initkey;
-        //Util.arrayCopyNonAtomic(buf,bOff,m_IV,(short)0,bLen);
-        isInitialized=true;
+         throw new CryptoException(CryptoException.ILLEGAL_USE);
     }
 
     public byte getAlgorithm() {
