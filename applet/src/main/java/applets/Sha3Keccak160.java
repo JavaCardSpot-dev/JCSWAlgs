@@ -1,8 +1,6 @@
 package applets;
 
-import javacard.framework.JCSystem;
 import javacard.framework.Util;
-import applets.Sha3Keccak.double_uint8;
 
 public class Sha3Keccak160 extends Sha3Keccak
 {

@@ -24,6 +24,17 @@ From https://github.com/albertocarp/Primitives_SmartCard
 
 All algorithms are allows to reuse already allocated cryptographic primitives and RAM memory arrays to decrease memory footprint. Allocation of the algorithm is therefore performed differently from native primitives (e.g., SWAES.getInstance() instead of Cipher.getInstance() is required).
 
+Following Applets and APDU clients shows example usage of various primitives:
+
+CipherApplet.java and SimpleAPDU.java for Twine and Zorro
+AESApplet.java and AESAPDU.java for JavaCardAES
+AES_CBC_Applet.java and AES_CBCAPDU.java for example of AES implementation in CBC mode
+Sha3Applet.java and Sha3APDU.java for example of various SHA-3 Keccak Modes
+Sha512Applet.java and Sha512APDU.java for example of SHA512 usage
+RSAOAEPApplet.java and RSAOAEPApdu.java for example of RSA-OAEP usage
+
+All the applets are checked to be working on cards with JCOP 2.1.1.
+(white cards on gemplus readers)
 
 Usage of Block ciphers-
 -----
@@ -32,56 +43,66 @@ Twine_80
 -----
 ````java
 // Allocate instance of TwineCipher 
-// m_dataArray is a 10byte buffer containing key
- m_TwineCipher = TwineCipher.getInstance(TwineCipher.TWINE_CIPHER_80,m_dataArray);
+TwineCipher m_twine = new TwineCipher(); //new object
+TwineCipher m_twine = TwineCipher.getInstance(); //static object
 
-// Encrypt data
-len_data  = m_TwineCipher.process(OFFSET_P1_ENC, buf, bufOff, count_data);
+//initialize instance with key
+m_twine.init(Key initkey, byte mode) 
+//initkey is a DESKey with type KeyBuilder.TYPE_DES and length KeyBuilder.LENGTH_DES3_2KEY
+//mode is Cipher.MODE_ENCRYPT or Cipher.MODE_DECRYPT
+//only uses first 10bytes of the key from the available 16 bytes in initkey
 
-// Decrypt data
-len_data  = m_TwineCipher.process(TwineCipher.OFFSET_P1_DEC, buf,bufOff, count_data);
+//m_twine.init(Key key, byte mode, byte[] buf, short bOff, short bLen) throws an error since 
+//this mode of init is not supported in this implementation
 
-//set key (count_data should be 10bytes)
-len_data = m_TwineCipher.process(TwineCipher.OFFSET_P1_GEN, buf, bufOff, count_data);
+// Encrypt/Decrypt data
+m_twine.doFinal(byte[] inBuff, short inOffset, short inLength,byte[] outBuff, short outOffset)
+//m_twine.update(byte[] arg0, short arg1, short arg2, byte[] arg3, short arg4) throws an error since
+//this mode of init is not supported in this implementation
+
 
 ````
 ZorroCipher
 -----
 ````java
 // Allocate instance of ZorroCipher 
- m_ZorroCipher = ZorroCipher.getInstance();
+ZorroCipher m_zorro = new ZorroCipher(); //new object
+ZorroCipher m_zorro = ZorroCipher.getInstance(); //static object
 
-// Encrypt data
-//count_data=32bytes, 1st 16bytes data, 2nd 16 bytes key
-len_data  = m_ZorroCipher.process(OFFSET_P1_ENC, buf, bufOff, count_data);
+//initialize instance with key
+m_zorro.init(Key initkey, byte mode) 
+//initkey is a DESKey with type KeyBuilder.TYPE_DES and length KeyBuilder.LENGTH_DES3_2KEY
+//mode is Cipher.MODE_ENCRYPT or Cipher.MODE_DECRYPT
 
-// Decrypt data
-//count_data=32bytes, 1st 16bytes data, 2nd 16 bytes key
-len_data  = m_ZorroCipher process(TwineCipher.OFFSET_P1_DEC, buf,bufOff, count_data);
+//m_zorro.init(Key key, byte mode, byte[] buf, short bOff, short bLen) throws an error since 
+//this mode of init is not supported in this implementation
+
+// Encrypt/Decrypt data
+m_zorro.doFinal(byte[] inBuff, short inOffset, short inLength,byte[] outBuff, short outOffset)
+//m_zorro.update(byte[] arg0, short arg1, short arg2, byte[] arg3, short arg4) throws an error since
+//this mode of init is not supported in this implementation
 
 ````
 
 AES Cipher
 -----
 ````java
-// allocate engine
-    JavaCardAES aesCipher = new JavaCardAES();
-    // set array with initiualization vector
-    aesCipher.m_IV = array_with_IV;
-    aesCipher.m_IVOffset = 0;
+// Allocate instance of JavaCardAES 
+JavaCardAES m_aes = new JavaCardAES(); //new object
+JavaCardAES m_aes = JavaCardAES.getInstance(); //static object
 
-    // schedule keys for first key into array array_for_round_keys_1
-    aesCipher.RoundKeysSchedule(array_with_key1, (short) 0, array_for_round_keys_1);
-    // encrypt block with first key
-    aesCipher.AESEncryptBlock(data_to_encrypt, start_offset_of_data, array_for_round_keys_1);
+//initialize instance with key
+m_aes.init(Key initkey, byte mode) 
+//initkey is a DESKey with type KeyBuilder.TYPE_DES and length KeyBuilder.LENGTH_DES3_2KEY
+//mode is Cipher.MODE_ENCRYPT or Cipher.MODE_DECRYPT
 
-    // schedule keys for second key into array array_for_round_keys_2
-    aesCipher.RoundKeysSchedule(array_with_key_2, (short) 0, array_for_round_keys_2);
-    // decrypt block with second key
-    aesCipher.AESDecryptBlock(data_to_decrypt_2, start_offset_of_data, array_for_round_keys_2);
+//m_aes.init(Key key, byte mode, byte[] buf, short bOff, short bLen) throws an error since 
+//this mode of init is not supported in this implementation
 
-    // encrypt again with first key
-    aesCipher.AESEncryptBlock(data_to_decrypt_2, start_offset_of_data, array_for_round_keys_1);
+// Encrypt/Decrypt data
+m_aes.doFinal(byte[] inBuff, short inOffset, short inLength,byte[] outBuff, short outOffset)
+//m_aes.update(byte[] arg0, short arg1, short arg2, byte[] arg3, short arg4) throws an error since
+//this mode of init is not supported in this implementation
 ````
 
 SHA512(SHA2)

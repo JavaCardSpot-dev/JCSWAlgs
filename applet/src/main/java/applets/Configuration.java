@@ -1,8 +1,6 @@
 package applets;
 
-import javacard.security.RandomData;
-
-public class Configuration implements IConsts 
+public class Configuration implements IConsts
 {
 	public static final boolean inRAM = false;  
 	

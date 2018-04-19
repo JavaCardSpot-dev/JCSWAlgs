@@ -52,7 +52,9 @@ SPEED (GXP E64PK):
 /**/
 
 package applets;
-import javacard.framework.*;
+
+import javacard.framework.JCSystem;
+import javacard.framework.Util;
 import javacard.security.CryptoException;
 import javacard.security.DESKey;
 import javacard.security.Key;
@@ -71,6 +73,7 @@ public class JavaCardAES extends Cipher {
     //ramarrays for roundkeys and IV
     private byte[] aesRoundKeys =null;
     private byte[] temp = null;
+    public static JavaCardAES m_instance =null;
 
 
   final static short SW_IV_BAD                        = (short) 0x6709;   // BAD INICIALIZATION VECTOR
@@ -129,7 +132,12 @@ public class JavaCardAES extends Cipher {
       aesRoundKeys = JCSystem.makeTransientByteArray((short)300, JCSystem.CLEAR_ON_RESET);
       MakeSBox();
     }
-
+    public static JavaCardAES getInstance()
+    {
+        if(m_instance == null)
+            m_instance = new JavaCardAES();
+        return m_instance;
+    }
     // CALCULATION OF LOOKUP TABLES FOR REDUCING CODE SIZE
     private void MakeSBox() {
       byte   p = 1;

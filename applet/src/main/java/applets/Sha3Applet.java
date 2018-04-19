@@ -4,9 +4,6 @@ import javacard.framework.APDU;
 import javacard.framework.Applet;
 import javacard.framework.ISO7816;
 import javacard.framework.ISOException;
-
-import javacard.framework.*;
-import javacard.security.*;
 public class Sha3Applet extends Applet
         implements IConsts {
     private byte m_ramArray[] = null;

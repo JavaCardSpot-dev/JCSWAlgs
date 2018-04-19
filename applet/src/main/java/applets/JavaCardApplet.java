@@ -1,9 +1,5 @@
 package applets;
 
-import javacard.framework.*;
-import javacard.security.*;
-import javacardx.crypto.Cipher;
-
 public class JavaCardApplet
 {
 

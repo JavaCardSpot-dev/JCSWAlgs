@@ -1,7 +1,6 @@
 package applets;
 
 import javacard.framework.Util;
-import applets.Sha3Keccak.double_uint8;
 
 public abstract class Sha3Keccak_W16 extends Sha3Keccak {
 

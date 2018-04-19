@@ -1,7 +1,5 @@
 package applets;
 
-import javacard.framework.ISO7816;
-import javacard.framework.ISOException;
 import javacard.framework.JCSystem;
 import javacard.framework.Util;
 import javacard.security.CryptoException;
@@ -9,7 +7,6 @@ import javacard.security.DESKey;
 import javacard.security.Key;
 import javacard.security.KeyBuilder;
 import javacardx.crypto.Cipher;
-import javacardx.crypto.KeyEncryption;
 /**
  * The TWINE Cipher implementation
  * @author Alberto-PC
@@ -26,6 +23,7 @@ public class TwineCipher extends Cipher implements IConsts {
 	private  byte[] temp2   =  null;
 	private  byte[] temp3   =  null;
 	private  byte[] rk 	= null;
+	public static TwineCipher m_instance =null;
 
 	//for storing the expanded key
 
@@ -47,47 +45,11 @@ public class TwineCipher extends Cipher implements IConsts {
 	private final  byte	 [] sbox = {0x0C, 0x00, 0x0F, 0x0A, 0x02, 0x0B, 0x09, 0x05, 0x08, 0x03, 0x0D, 0x07, 0x01, 0x0E, 0x06, 0x04};
 	private final  byte	 [] data_enc  = new byte[16];
 	// Key size of twine cipher is 80 bits i.e. 10 byte
-	public static TwineCipher getInstance(byte type,byte[] key)
+	public static TwineCipher getInstance()
 	{
-		switch(type)
-		{
-			case TWINE_CIPHER_80:
-				if(ref_twineCipher_80 != null)
-					return ref_twineCipher_80;
-				ref_twineCipher_80 =  new TwineCipher(key,TWINE_CIPHER_80);
-				return ref_twineCipher_80;
-			default:
-				ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
-		}
-		ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
-		return null;
-	}
-	
-	public static TwineCipher getInstance(byte type)
-	{
-		switch(type)
-		{
-			case TWINE_CIPHER_80:
-				if(ref_twineCipher_80 != null)
-					return ref_twineCipher_80;
-				ref_twineCipher_80 =  new TwineCipher();
-				return ref_twineCipher_80;
-			default:
-				ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
-		}
-		ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
-		return null;
-	}
-	private TwineCipher(byte[] key,byte keySize)
-	{
-		switch(keySize)
-		{
-			case TWINE_CIPHER_80:
-				expand80Key(key);
-				break;
-			default:
-				ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
-		}
+		if(m_instance == null)
+			m_instance = new TwineCipher();
+		return m_instance;
 	}
 	protected TwineCipher()
 	{

@@ -27,11 +27,14 @@ USAGE:
 
 package applets;
 
-import javacard.framework.*;
-import javacard.security.*;
-import javacardx.crypto.*;
-
-import java.util.Random;
+import javacard.framework.ISO7816;
+import javacard.framework.ISOException;
+import javacard.framework.JCSystem;
+import javacard.framework.Util;
+import javacard.security.Key;
+import javacard.security.MessageDigest;
+import javacard.security.RandomData;
+import javacardx.crypto.Cipher;
 
 /**
  * JavaCard software implementation of OAEP padding. Based on BouncyCastle implementation (www.bouncycastle.org).

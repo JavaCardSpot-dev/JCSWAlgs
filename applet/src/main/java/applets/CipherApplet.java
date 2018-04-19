@@ -1,7 +1,8 @@
 package applets;
 
 import javacard.framework.*;
-import javacard.security.*;
+import javacard.security.DESKey;
+import javacard.security.KeyBuilder;
 import javacardx.crypto.Cipher;
 
 public class CipherApplet extends Applet implements IConsts{

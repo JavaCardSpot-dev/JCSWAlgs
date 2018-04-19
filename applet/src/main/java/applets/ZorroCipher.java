@@ -1,6 +1,5 @@
 package applets;
 
-import javacard.framework.ISO7816;
 import javacard.framework.JCSystem;
 import javacard.framework.Util;
 import javacard.security.CryptoException;

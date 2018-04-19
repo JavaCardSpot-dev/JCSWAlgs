@@ -1,7 +1,5 @@
 package applets;
 
-import applets.Sha3Keccak.double_uint8;
-
 public class Sha3Keccak_r128_c272 extends Sha3Keccak_W16
 {
 	static Sha3Keccak_r128_c272 p_Instance = null;
