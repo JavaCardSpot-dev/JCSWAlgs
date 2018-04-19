@@ -24,7 +24,8 @@ public class Sha3Keccak_r144_c256 extends Sha3Keccak_W16 {
 		KECCAK_CAPACITY = (short) (2*KECCAK_SEC_LEVEL);
 		//Code is modified to match with standard Keccak implementation of r+c=1600
 		KECCAK_RATE = (short)(KECCAK_STATE_SIZE_BITS - KECCAK_CAPACITY);
-		//KECCAK_RATE = (short) (KECCAK_STATE_SIZE_BITS - KECCAK_CAPACITY);
+		//KECCAK_RATE = (short) (KECCAK_STATE_SIZE_BITS - KECCAK_CAPACITY)
+		//KECCAK_RATE = 1344;//(short)(KECCAK_STATE_SIZE_BITS - KECCAK_CAPACITY);
 		KECCAK_STATE_SIZE_WORDS  = (short) ((short)(KECCAK_STATE_SIZE_BITS+ ((short)(PROCESSOR_WORD-1)))/(PROCESSOR_WORD));
 		KECCAK_RATE_SIZE_WORDS =  (short) ((short)(KECCAK_RATE+(short)(PROCESSOR_WORD-1))/(PROCESSOR_WORD));
 		state = new double_uint8[KECCAK_STATE_SIZE_WORDS];
