@@ -80,56 +80,6 @@ public class SimpleAPDU {
         response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x33,plain));
         System.out.println("Decrypting: ");
         response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x33,response.getData()));
-
-/*
-        System.out.println("3)AES128");
-        System.out.println("Setting Key: ");
-        key=Util.hexStringToByteArray("00000000000000000000000000000000 ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,key));
-        System.out.println("Encrypting: ");
-        plain=Util.hexStringToByteArray("f34481ec3cc627bacd5dc3fb08f273e6");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x21,0x32,plain));
-        System.out.println("Decrypting: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x11,0x22,0x32,response.getData()));
-
-
-/*
-        System.out.println("RSA OAEP: ");
-        System.out.println("Encode: ");
-        plain=Util.hexStringToByteArray("11111122222211");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x25,0x51,0x00,plain));
-        System.out.println("Decode: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x25,0x52,0x00,response.getData()));
-
-
-        System.out.println("Hash: ");
-        plain=Util.hexStringToByteArray("00");  //only 50 bytes possible
-       //ResponseAPDU response = cardMngr.transmit(new CommandAPDU(0x00,0x11,0x23,0x32,aes_key_iv));
-        //System.out.println(response);
-        System.out.println("Keccak_160: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x40,0x00,plain));
-        byte[] plain_max=Util.hexStringToByteArray("60616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566676869606162636465666768696061626364656667686960616263646566");
-        byte[] Test_Vector1=Util.hexStringToByteArray("010000000058590e59bf419e1981b6");
-        System.out.println("Keccak_160 (Round:1 Pre image): ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x40,0x00,Test_Vector1));
-        System.out.println("KECCAK_r144c256: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x41,0x00,plain));
-        System.out.println("KECCAK_r128c272: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x42,0x00,plain));
-        System.out.println("KECCAK_r544c256: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x43,0x00,plain_max));
-        System.out.println("KECCAK_r512c288: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x44,0x00,plain));
-        System.out.println("KECCAK_r256c544: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x46,0x00,plain));
-        System.out.println("SHA512: ");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x24,0x47,0x00,plain));
-
-        System.out.println("Tests: ");
-        plain=Util.hexStringToByteArray("11111122222211");
-        response =cardMngr.transmit(new CommandAPDU(0x00,0x23,0x00,0x00,plain));
-*/
-
         return response;
 
 

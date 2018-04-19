@@ -54,7 +54,11 @@ public class Sha3APDU {
         final RunConfig runCfg = RunConfig.getDefaultConfig();
         byte[] install_data=Util.hexStringToByteArray("00000000112233445566778899000000112233445566778899");
         // A) If running on physical card
+<<<<<<< HEAD
         runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
+=======
+        //runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
+>>>>>>> d157b62f19ef19d92cc3fa02ff1dded3870a8615
 
         // B) If running in the simulator
         /*runCfg.setAppletToSimulate(Sha3Applet.class); // main class of applet to simulate
@@ -70,7 +74,6 @@ public class Sha3APDU {
         ResponseAPDU response;
         // Connect to first available card
         // NOTE: selects target applet based on AID specified in CardManager constructor
-       System.out.println("Symmetric Block Ciphers: ");
         byte[] key;
         byte[] plain;
 
