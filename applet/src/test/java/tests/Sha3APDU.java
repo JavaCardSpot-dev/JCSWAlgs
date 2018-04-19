@@ -48,19 +48,19 @@ public class Sha3APDU {
     public static ResponseAPDU demoSingleCommand() throws Exception {
 
         // CardManager abstracts from real or simulated card, provide with applet AID
-        final CardManager cardMngr = new CardManager(false, APPLET_AID);
+        final CardManager cardMngr = new CardManager(true, APPLET_AID);
 
         // Get default configuration for subsequent connection to card (personalized later)
         final RunConfig runCfg = RunConfig.getDefaultConfig();
         byte[] install_data=Util.hexStringToByteArray("00000000112233445566778899000000112233445566778899");
         // A) If running on physical card
-//        runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
+        runCfg.setTestCardType(RunConfig.CARD_TYPE.PHYSICAL); // Use real card
 
         // B) If running in the simulator
-        runCfg.setAppletToSimulate(Sha3Applet.class); // main class of applet to simulate
+        /*runCfg.setAppletToSimulate(Sha3Applet.class); // main class of applet to simulate
         runCfg.setTestCardType(RunConfig.CARD_TYPE.JCARDSIMLOCAL); // Use local simulator
         runCfg.setbReuploadApplet(true);
-        runCfg.setInstallData(install_data);
+        runCfg.setInstallData(install_data);*/
 
         System.out.print("Connecting to card...");
         if (!cardMngr.Connect(runCfg)) {
