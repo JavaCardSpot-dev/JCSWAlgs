@@ -43,8 +43,7 @@ public class CipherApplet extends Applet implements IConsts{
             m_zorro_dec = new ZorroCipher();
             m_twine_enc = new TwineCipher();
             m_twine_dec = new TwineCipher();
-            //m_aes_enc = new JavaCardAES();
-            //m_aes_dec = new JavaCardAES();
+
 
 
         }
