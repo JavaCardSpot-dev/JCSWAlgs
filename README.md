@@ -27,10 +27,15 @@ All algorithms are allows to reuse already allocated cryptographic primitives an
 Following Applets and APDU clients shows example usage of various primitives:
 
 CipherApplet.java and SimpleAPDU.java for Twine and Zorro
+
 AESApplet.java and AESAPDU.java for JavaCardAES
+
 AES_CBC_Applet.java and AES_CBCAPDU.java for example of AES implementation in CBC mode
+
 Sha3Applet.java and Sha3APDU.java for example of various SHA-3 Keccak Modes
+
 Sha512Applet.java and Sha512APDU.java for example of SHA512 usage
+
 RSAOAEPApplet.java and RSAOAEPApdu.java for example of RSA-OAEP usage
 
 All the applets are checked to be working on cards with JCOP 2.1.1.
