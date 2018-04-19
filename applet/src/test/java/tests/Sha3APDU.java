@@ -98,8 +98,7 @@ public class Sha3APDU {
        // System.out.println("Tests: ");
        // plain=Util.hexStringToByteArray("11111122222211");
        // response =cardMngr.transmit(new CommandAPDU(0x00,0x23,0x00,0x00,plain));
-
-
+        
         return response;
 
 
